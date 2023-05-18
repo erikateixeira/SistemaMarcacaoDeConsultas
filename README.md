@@ -1,23 +1,30 @@
-# SistemaMarcacaoDeConsultas
+# Sistema de Marcação de Consultas
 > Projeto do curso de Desenvolvimento WEB - Saper.edu
 
 # Grupo:
-- Débora Da Silva Sousa
-- Érika Maria Taveira Dos Santos Teixeira
-- Hellry Robert Oliveira Souza	
-- João Vitor da Fraga Anacleto
+* Débora da Silva Sousa
+* Érika Maria Taveira dos Santos Teixeira
+* Hellry Robert Oliveira Souza
+* João Vitor da Fraga Anacleto
 
-<h2> Diagrama de classe </h2>
+# Diagrama de Classe
+
 ![Diagrama de Classe - Sistema de Marcação de Consultas](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/assets/131728883/a069610c-16de-49bb-94a9-08b50284a2bf)
 
+# Diagrama de Entidade-Relacional
 
-
-<h2> Diagrama de Entidade-Relacional
-<h6>Diagrama de Entidade-Relacional
-(https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/files/11511321/diagrama-entidade-relacional.pdf)
+![Diagrama de Entidade-Relacionamento - Sistema de Marcação de Consultas](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/assets/131728883/d4709904-c17a-4908-bc93-59d61628540a)
 
   
-<h2> Script SQL de criação do banco de dados do projeto
-<h6> [Modelo de banco de dados] (https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/files/11503327/Modelo.de.banco.de.dados.pdf)
-<h6> Script SQL Sistema de Marcacao de Consulta - MySQL (https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/files/11503345/Script.SQL.Sistema.de.Marcacao.de.Consulta.-.MySQL.pdf)
-<h6> Script SQL Sistema de Marcacao de Consulta - ORACLE (https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/files/11503362/Script.SQL.Sistema.de.Marcacao.de.Consulta.-.ORACLE.pdf)
+# Script SQL de criação do banco de dados do projeto
+* Modelo de banco de dados
+
+![Modelo de banco de dados](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/assets/131728883/4408b041-c8b1-4c0b-a8dd-d75a5d4c0111)
+
+* Scripts SQL nas versões MySQL e Oracle
+<p> Versões editáveis (.sql) disponíveis no main - Necessário utilizar o software MySQL Workbench ou Oracle Database e Oracle SQL Developer </p>
+
+[Script SQL Sistema de Marcacao de Consulta - MySQL](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/files/11512266/Script.SQL.Sistema.de.Marcacao.de.Consulta.-.MySQL.pdf)
+
+[Script SQL Sistema de Marcacao de Consulta - ORACLE](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/files/11512268/Script.SQL.Sistema.de.Marcacao.de.Consulta.-.ORACLE.pdf)
+
