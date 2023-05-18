@@ -7,7 +7,9 @@
 - Hellry Robert Oliveira Souza	
 - João Vitor da Fraga Anacleto
 
-<h2> [Diagrama de Classe](docs/DiagramaDeClasse.md)
+<h2> Diagrama de classe </h2>
+[Diagrama de Classe](docs/DiagramaDeClasse.md)
+
 
 <h2> Diagrama de Entidade-Relacional
 <h6>Diagrama de Entidade-Relacional
