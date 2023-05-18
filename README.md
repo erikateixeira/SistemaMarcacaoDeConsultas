@@ -7,9 +7,7 @@
 - Hellry Robert Oliveira Souza	
 - João Vitor da Fraga Anacleto
 
-<h2> Diagrama de Classes
-<h6> Diagrama de Classe - Sistema de Marcação de Consultas
-(https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/files/11503393/Diagrama.de.Classe.-.Sistema.de.Marcacao.de.Consultas.pdf)
+<h2> [Diagrama de Classe](docs/DiagramaDeClasse.md)
 
 <h2> Diagrama de Entidade-Relacional
 <h6>Diagrama de Entidade-Relacional
