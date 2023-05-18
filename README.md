@@ -12,4 +12,6 @@
 <h2> Diagrama de Entidade-Relacional
 
 <h2> Script SQL de criação do banco de dados do projeto
-<p> [Modelo de banco de dados](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/files/11503327/Modelo.de.banco.de.dados.pdf)
+<h6> Modelo de banco de dados (https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/files/11503327/Modelo.de.banco.de.dados.pdf)
+<h6> Script SQL Sistema de Marcacao de Consulta - MySQL (https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/files/11503345/Script.SQL.Sistema.de.Marcacao.de.Consulta.-.MySQL.pdf)
+<h6> Script SQL Sistema de Marcacao de Consulta - ORACLE (https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/files/11503362/Script.SQL.Sistema.de.Marcacao.de.Consulta.-.ORACLE.pdf)
