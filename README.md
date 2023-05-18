@@ -8,7 +8,8 @@
 - João Vitor da Fraga Anacleto
 
 <h2> Diagrama de classe </h2>
-[Diagrama de Classe](docs/DiagramaDeClasse.md)
+![Diagrama de Classe - Sistema de Marcação de Consultas](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/assets/131728883/a069610c-16de-49bb-94a9-08b50284a2bf)
+
 
 
 <h2> Diagrama de Entidade-Relacional
