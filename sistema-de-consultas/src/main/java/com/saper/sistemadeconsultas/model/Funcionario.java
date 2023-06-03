@@ -1,6 +1,8 @@
 package com.saper.sistemadeconsultas.model;
 
 import java.util.*;
+
+import com.saper.sistemadeconsultas.dto.FuncionarioResquestDTO;
 import jakarta.persistence.*;
 
 @Entity
@@ -31,7 +33,7 @@ public class Funcionario {
     @Column(name = "data_nascimento_funcionario",
             nullable = false,
             length = 10) //  21/07/1998
-    private String data_nascimento; // não sei usar o comando date
+    private Date data_nascimento; // não sei usar o comando date
 
     @Column(name = "endereco_funcionario",
             nullable = false)
@@ -82,7 +84,24 @@ public class Funcionario {
     public Funcionario() {
     }
 
-    public Funcionario(Long id, String nome, String cpf, String rg, String data_nascimento, String endereco, String cep, String bairro, String cidade, String estado, String telefone, String email, String funcao, String login, String senha) {
+    public Funcionario(FuncionarioResquestDTO funcionarioResquestDTO){
+        this.nome = funcionarioResquestDTO.nome;
+        this.cpf = funcionarioResquestDTO.cpf;
+        this.rg = funcionarioResquestDTO.rg;
+        this.data_nascimento = funcionarioResquestDTO.data_nascimento;
+        this.endereco = funcionarioResquestDTO.endereco;
+        this.cep = funcionarioResquestDTO.cep;
+        this.bairro = funcionarioResquestDTO.bairro;
+        this.cidade = funcionarioResquestDTO.cidade;
+        this.estado = funcionarioResquestDTO.estado;
+        this.telefone = funcionarioResquestDTO.telefone;
+        this.email = funcionarioResquestDTO.email;
+        this.funcao = funcionarioResquestDTO.funcao;
+        this.login = funcionarioResquestDTO.login;
+        this.senha = funcionarioResquestDTO.senha;
+    }
+
+    public Funcionario(Long id, String nome, String cpf, String rg, Date data_nascimento, String endereco, String cep, String bairro, String cidade, String estado, String telefone, String email, String funcao, String login, String senha) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
@@ -132,11 +151,11 @@ public class Funcionario {
         this.rg = rg;
     }
 
-    public String getData_nascimento() {
+    public Date getData_nascimento() {
         return data_nascimento;
     }
 
-    public void setData_nascimento(String data_nascimento) {
+    public void setData_nascimento(Date data_nascimento) {
         this.data_nascimento = data_nascimento;
     }
 

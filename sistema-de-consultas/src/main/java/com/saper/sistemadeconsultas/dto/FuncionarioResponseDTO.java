@@ -2,12 +2,14 @@ package com.saper.sistemadeconsultas.dto;
 
 import com.saper.sistemadeconsultas.model.Funcionario;
 
+import java.util.Date;
+
 public class FuncionarioResponseDTO {
     public Long id;
     public String nome;
     public String cpf;
     public String rg;
-    public String data_nascimento;
+    public Date data_nascimento;
     public String endereco;
     public String cep;
     public String bairro;
