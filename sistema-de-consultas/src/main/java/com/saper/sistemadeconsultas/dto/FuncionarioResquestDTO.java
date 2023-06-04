@@ -19,5 +19,4 @@ public class FuncionarioResquestDTO {
     public String login;
     public String senha;
 
-
 }

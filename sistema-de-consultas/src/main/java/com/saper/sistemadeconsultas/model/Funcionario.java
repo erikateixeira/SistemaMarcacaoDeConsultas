@@ -61,11 +61,13 @@ public class Funcionario {
 
     @Column(name = "telefone_funcionario",
             nullable = false,
+            unique = true,
             length = 16) // (85) 9.9623-0391
     private String telefone;
 
     @Column(name = "email_funcionario",
             nullable = false,
+            unique = true,
             length = 80)
     private String email;
 
@@ -74,6 +76,7 @@ public class Funcionario {
     private String funcao;
 
     @Column(name = "login_funcionario",
+            unique = true,
             length = 45)
     private String login;
 

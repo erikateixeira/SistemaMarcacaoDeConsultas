@@ -22,6 +22,17 @@ public class FuncionarioController {
         return funcionarioService.save(funcionarioResquestDTO);
     }
 
+    @PutMapping("/{nome}")
+    public Object update(@PathVariable(name = "nome") String nome,
+                         @RequestBody FuncionarioResquestDTO funcionarioResquestDTO){
+        return funcionarioService.update(nome, funcionarioResquestDTO);
+    }
+
+    @DeleteMapping("/{nome}")
+    public Object delete(@PathVariable(name = "nome") String nome){
+        return funcionarioService.delete(nome);
+    }
+
 
 
 
