@@ -31,9 +31,8 @@ public class Funcionario {
     private String rg;
 
     @Column(name = "data_nascimento_funcionario",
-            nullable = false,
-            length = 10) //  21/07/1998
-    private Date data_nascimento; // não sei usar o comando date
+            nullable = false)
+    private Date data_nascimento;
 
     @Column(name = "endereco_funcionario",
             nullable = false)
