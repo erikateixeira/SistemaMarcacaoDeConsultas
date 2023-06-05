@@ -5,7 +5,12 @@
 * Débora da Silva Sousa
 * Érika Maria Taveira dos Santos Teixeira
 * Hellry Robert Oliveira Souza
-* João Vitor da Fraga Anacleto
+
+# Logomarca
+
+
+# Identidade Visual
+
 
 # Diagrama de Classe
 
