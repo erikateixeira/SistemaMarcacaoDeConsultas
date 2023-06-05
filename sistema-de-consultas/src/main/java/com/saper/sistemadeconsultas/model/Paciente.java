@@ -42,7 +42,8 @@ public class Paciente {
     @Column(length = 80)
     private String nome_responsavel;
 
-    @Column(length = 14)
+    @Column(unique = true,
+            length = 14)
     private String cpf_responsavel;
 
     @Column(length = 30)

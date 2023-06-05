@@ -22,7 +22,11 @@ public class PacienteController {
         return pacienteService.save(pacienteRequestDTO);
     }
 
-    //UPDATE
+    @PutMapping("/{nome}")
+    public Object update(@PathVariable(name = "nome") String nome,
+                         @RequestBody PacienteRequestDTO pacienteRequestDTO){
+        return pacienteService.update(nome, pacienteRequestDTO);
+    }
 
     @DeleteMapping("/{nome}")
     public Object delete(@PathVariable(name = "nome") String nome){
