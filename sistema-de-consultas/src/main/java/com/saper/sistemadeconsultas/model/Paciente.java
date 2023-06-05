@@ -4,6 +4,7 @@ import com.saper.sistemadeconsultas.dto.PacienteRequestDTO;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 public class Paciente {
@@ -93,6 +94,9 @@ public class Paciente {
 
     private Date validade_plano;
 
+    @OneToMany(mappedBy = "paciente")
+    Set<Consulta> consultas;
+
     public Paciente() {
     }
 
@@ -115,6 +119,14 @@ public class Paciente {
         this.plano_saude = pacienteRequestDTO.plano_saude;
         this.num_plano = pacienteRequestDTO.num_plano;
         this.validade_plano = pacienteRequestDTO.validade_plano;
+    }
+
+    public Set<Consulta> getConsultas() {
+        return consultas;
+    }
+
+    public void setConsultas(Set<Consulta> consultas) {
+        this.consultas = consultas;
     }
 
     public Paciente(Long id, String nome_id, String nome, String cpf, String passaporte, Date data_nascimento, String nome_responsavel, String cpf_responsavel, String genero, String endereco, String cep, String bairro, String cidade, String estado, String telefone, String email, String plano_saude, Long num_plano, Date validade_plano) {

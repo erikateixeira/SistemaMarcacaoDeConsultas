@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Medico {
@@ -76,6 +77,9 @@ public class Medico {
     @Column(nullable = false)
     private Long valor_consulta;
 
+    @OneToMany(mappedBy = "medico")
+    Set<Consulta> consultas;
+
     public Medico() {
     }
 
@@ -95,6 +99,14 @@ public class Medico {
         this.hora_final = medicoRequestDTO.hora_final;
         this.valor_consulta = medicoRequestDTO.valor_consulta;
 
+    }
+
+    public Set<Consulta> getConsultas() {
+        return consultas;
+    }
+
+    public void setConsultas(Set<Consulta> consultas) {
+        this.consultas = consultas;
     }
 
     public Medico(Long id, String nome, String cnpj, String crm_estado, String crm_num, String telefone, String email, String especialidade, String sala, String login, String senha, List<String> data_disponivel, Date hora_inicial, Date hora_final, Long valor_consulta) {

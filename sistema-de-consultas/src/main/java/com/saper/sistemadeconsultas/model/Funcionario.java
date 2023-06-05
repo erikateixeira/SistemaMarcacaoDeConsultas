@@ -83,6 +83,9 @@ public class Funcionario {
             length = 15)
     private String senha;
 
+    @OneToMany(mappedBy = "funcionario")
+    Set<Consulta> consultas;
+
     public Funcionario() {
     }
 
@@ -101,6 +104,14 @@ public class Funcionario {
         this.funcao = funcionarioResquestDTO.funcao;
         this.login = funcionarioResquestDTO.login;
         this.senha = funcionarioResquestDTO.senha;
+    }
+
+    public Set<Consulta> getConsultas() {
+        return consultas;
+    }
+
+    public void setConsultas(Set<Consulta> consultas) {
+        this.consultas = consultas;
     }
 
     public Funcionario(Long id, String nome, String cpf, String rg, Date data_nascimento, String endereco, String cep, String bairro, String cidade, String estado, String telefone, String email, String funcao, String login, String senha) {
