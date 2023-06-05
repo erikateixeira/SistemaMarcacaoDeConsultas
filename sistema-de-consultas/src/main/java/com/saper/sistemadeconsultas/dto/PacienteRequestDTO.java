@@ -1,7 +1,5 @@
 package com.saper.sistemadeconsultas.dto;
 
-import jakarta.persistence.Column;
-
 import java.util.Date;
 
 public class PacienteRequestDTO {
