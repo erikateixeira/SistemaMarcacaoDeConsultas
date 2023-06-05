@@ -10,7 +10,7 @@
 ![Première Santé](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/assets/131729762/9235bb42-509c-4787-9f16-1e95a327e982)
 
 # Identidade Visual
-[A MARCA.pdf](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/files/11655169/A.MARCA.pdf)
+[BRANDING](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/files/11655169/A.MARCA.pdf)
 
 
 # Diagrama de Classe
