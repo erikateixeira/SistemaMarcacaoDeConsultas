@@ -12,8 +12,13 @@
 # Identidade Visual
 [BRANDING](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/files/11655169/A.MARCA.pdf)
 
+# Identidade Visual
 
-# Diagrama de Classe
+# Protótipo de Telas
+[Protótipo de Telas Sistema Externo](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/files/11658865/Prototipo.de.Telas.Sistema.Externo.pdf)
+
+[Protótipo de Telas Sistema Interno](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/files/11658867/Prototipo.de.Telas.Sistema.Interno.pdf)
+
 
 ![Diagrama de Classe - Sistema de Marcação de Consultas](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/assets/131728883/a069610c-16de-49bb-94a9-08b50284a2bf)
 
