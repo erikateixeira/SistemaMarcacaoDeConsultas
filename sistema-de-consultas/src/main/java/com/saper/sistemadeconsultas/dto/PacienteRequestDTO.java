@@ -1,6 +1,8 @@
 package com.saper.sistemadeconsultas.dto;
 
-import java.util.Date;
+
+import java.sql.Date;
+import java.time.LocalDate;
 
 public class PacienteRequestDTO {
 
@@ -8,7 +10,7 @@ public class PacienteRequestDTO {
     public String nome;
     public String cpf;
     public String passaporte;
-    public Date data_nascimento;
+    public LocalDate data_nascimento;
     public String nome_responsavel;
     public String cpf_responsavel;
     public String genero;
@@ -21,7 +23,7 @@ public class PacienteRequestDTO {
     public String email;
     public String plano_saude;
     public Long num_plano;
-    public Date validade_plano;
+    public LocalDate validade_plano;
 
 
 }

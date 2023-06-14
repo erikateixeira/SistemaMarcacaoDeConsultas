@@ -1,7 +1,7 @@
 package com.saper.sistemadeconsultas.dto;
 
-import java.util.Date;
-import java.util.List;
+import java.sql.Time;
+
 
 public class MedicoRequestDTO {
 
@@ -15,9 +15,9 @@ public class MedicoRequestDTO {
     public String sala;
     public String login;
     public String senha;
-    public List<String> data_disponivel;
-    public Date hora_inicial;
-    public Date hora_final;
+    public String[] diasDisponiveis;
+    public Time hora_inicial;
+    public Time hora_final;
     public Long valor_consulta;
 
 }

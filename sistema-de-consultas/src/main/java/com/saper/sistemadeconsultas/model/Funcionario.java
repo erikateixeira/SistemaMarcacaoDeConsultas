@@ -1,9 +1,12 @@
 package com.saper.sistemadeconsultas.model;
 
-import java.util.*;
-
 import com.saper.sistemadeconsultas.dto.FuncionarioResquestDTO;
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 public class Funcionario {
@@ -15,6 +18,7 @@ public class Funcionario {
 
     @Column(name = "nome_funcionario",
             nullable = false,
+            unique = true,
             length = 80)
     private String nome;
 
@@ -32,7 +36,8 @@ public class Funcionario {
 
     @Column(name = "data_nascimento_funcionario",
             nullable = false)
-    private Date data_nascimento;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate data_nascimento;
 
     @Column(name = "endereco_funcionario",
             nullable = false)
@@ -114,7 +119,7 @@ public class Funcionario {
         this.consultas = consultas;
     }
 
-    public Funcionario(Long id, String nome, String cpf, String rg, Date data_nascimento, String endereco, String cep, String bairro, String cidade, String estado, String telefone, String email, String funcao, String login, String senha) {
+    public Funcionario(Long id, String nome, String cpf, String rg, LocalDate data_nascimento, String endereco, String cep, String bairro, String cidade, String estado, String telefone, String email, String funcao, String login, String senha) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
@@ -164,11 +169,11 @@ public class Funcionario {
         this.rg = rg;
     }
 
-    public Date getData_nascimento() {
+    public LocalDate getData_nascimento() {
         return data_nascimento;
     }
 
-    public void setData_nascimento(Date data_nascimento) {
+    public void setData_nascimento(LocalDate data_nascimento) {
         this.data_nascimento = data_nascimento;
     }
 

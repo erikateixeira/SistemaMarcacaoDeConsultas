@@ -2,7 +2,9 @@ package com.saper.sistemadeconsultas.dto;
 
 import com.saper.sistemadeconsultas.model.Paciente;
 
-import java.util.Date;
+import java.sql.Date;
+import java.time.LocalDate;
+
 
 public class PacienteResponseDTO {
 
@@ -11,7 +13,7 @@ public class PacienteResponseDTO {
     public String nome;
     public String cpf;
     public String passaporte;
-    public Date data_nascimento;
+    public LocalDate data_nascimento;
     public String nome_responsavel;
     public String cpf_responsavel;
     public String genero;
@@ -24,7 +26,7 @@ public class PacienteResponseDTO {
     public String email;
     public String plano_saude;
     public Long num_plano;
-    public Date validade_plano;
+    public LocalDate validade_plano;
 
     public PacienteResponseDTO(Paciente paciente){
         this.id = paciente.getId();

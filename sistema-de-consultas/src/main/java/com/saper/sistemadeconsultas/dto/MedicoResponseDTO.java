@@ -2,8 +2,8 @@ package com.saper.sistemadeconsultas.dto;
 
 import com.saper.sistemadeconsultas.model.Medico;
 
-import java.util.Date;
-import java.util.List;
+
+import java.sql.Time;
 
 public class MedicoResponseDTO {
 
@@ -17,9 +17,9 @@ public class MedicoResponseDTO {
     public String especialidade;
     public String sala;
     public String login;
-    public List<String> data_disponivel;
-    public Date hora_inicial;
-    public Date hora_final;
+    public String[] diasDisponiveis;
+    public Time hora_inicial;
+    public Time hora_final;
     public Long valor_consulta;
 
     public MedicoResponseDTO(Medico medico) {
@@ -33,7 +33,7 @@ public class MedicoResponseDTO {
         this.especialidade = medico.getEspecialidade();
         this.sala = medico.getSala();
         this.login = medico.getSala();
-        this.data_disponivel = medico.getData_disponivel();
+        this.diasDisponiveis = medico.getDiasDisponiveis();
         this.hora_inicial = medico.getHora_inicial();
         this.hora_final = medico.getHora_final();
         this.valor_consulta = medico.getValor_consulta();

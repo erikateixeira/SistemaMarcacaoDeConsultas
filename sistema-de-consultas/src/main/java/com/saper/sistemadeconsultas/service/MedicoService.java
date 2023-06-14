@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,8 +79,8 @@ public class MedicoService {
             if(medicoRequestDTO.senha!=null){
                 medico.setSenha(medicoRequestDTO.senha);
             }
-            if(medicoRequestDTO.data_disponivel!=null){
-                medico.setData_disponivel(medicoRequestDTO.data_disponivel);
+            if(medicoRequestDTO.diasDisponiveis!=null){
+                medico.setDiasDisponiveis(medicoRequestDTO.diasDisponiveis);
             }
             if(medicoRequestDTO.hora_inicial!=null){
                 medico.setHora_inicial(medicoRequestDTO.hora_inicial);

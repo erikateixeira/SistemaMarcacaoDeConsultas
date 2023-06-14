@@ -2,8 +2,11 @@ package com.saper.sistemadeconsultas.model;
 
 import com.saper.sistemadeconsultas.dto.PacienteRequestDTO;
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -19,7 +22,7 @@ public class Paciente {
             length = 80)
     private String nome_id;
 
-    @Column(name = "nome_preferencia",
+    @Column(name = "nome_paciente",
             unique = true,
             nullable = false,
             length = 80)
@@ -38,7 +41,8 @@ public class Paciente {
     @Column(name = "data_nascimento_paciente",
             nullable = false,
             length = 10) //  21/07/1998
-    private Date data_nascimento;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate data_nascimento;
 
     @Column(length = 80)
     private String nome_responsavel;
@@ -92,7 +96,8 @@ public class Paciente {
 
     private Long num_plano;
 
-    private Date validade_plano;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate validade_plano;
 
     @OneToMany(mappedBy = "paciente")
     Set<Consulta> consultas;
@@ -129,7 +134,7 @@ public class Paciente {
         this.consultas = consultas;
     }
 
-    public Paciente(Long id, String nome_id, String nome, String cpf, String passaporte, Date data_nascimento, String nome_responsavel, String cpf_responsavel, String genero, String endereco, String cep, String bairro, String cidade, String estado, String telefone, String email, String plano_saude, Long num_plano, Date validade_plano) {
+    public Paciente(Long id, String nome_id, String nome, String cpf, String passaporte, LocalDate data_nascimento, String nome_responsavel, String cpf_responsavel, String genero, String endereco, String cep, String bairro, String cidade, String estado, String telefone, String email, String plano_saude, Long num_plano, LocalDate validade_plano) {
         this.id = id;
         this.nome_id = nome_id;
         this.nome = nome;
@@ -191,11 +196,11 @@ public class Paciente {
         this.passaporte = passaporte;
     }
 
-    public Date getData_nascimento() {
+    public LocalDate getData_nascimento() {
         return data_nascimento;
     }
 
-    public void setData_nascimento(Date data_nascimento) {
+    public void setData_nascimento(LocalDate data_nascimento) {
         this.data_nascimento = data_nascimento;
     }
 
@@ -295,11 +300,11 @@ public class Paciente {
         this.num_plano = num_plano;
     }
 
-    public Date getValidade_plano() {
+    public LocalDate getValidade_plano() {
         return validade_plano;
     }
 
-    public void setValidade_plano(Date validade_plano) {
+    public void setValidade_plano(LocalDate validade_plano) {
         this.validade_plano = validade_plano;
     }
 }

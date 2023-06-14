@@ -3,7 +3,11 @@ package com.saper.sistemadeconsultas.model;
 import com.saper.sistemadeconsultas.dto.MedicoRequestDTO;
 import jakarta.persistence.*;
 
-import java.util.Date;
+
+import java.sql.Date;
+import java.sql.Time;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -66,13 +70,13 @@ public class Medico {
     private String senha;
 
     @Column(nullable = false)
-    private List<String> data_disponivel;
+    private String[] diasDisponiveis;
 
     @Column(nullable = false)
-    private Date hora_inicial;
+    private Time hora_inicial;
 
     @Column(nullable = false)
-    private Date hora_final;
+    private Time hora_final;
 
     @Column(nullable = false)
     private Long valor_consulta;
@@ -94,7 +98,7 @@ public class Medico {
         this.sala = medicoRequestDTO.sala;
         this.login = medicoRequestDTO.login;
         this.senha = medicoRequestDTO.senha;
-        this.data_disponivel = medicoRequestDTO.data_disponivel;
+        this.diasDisponiveis = medicoRequestDTO.diasDisponiveis;
         this.hora_inicial = medicoRequestDTO.hora_inicial;
         this.hora_final = medicoRequestDTO.hora_final;
         this.valor_consulta = medicoRequestDTO.valor_consulta;
@@ -109,7 +113,7 @@ public class Medico {
         this.consultas = consultas;
     }
 
-    public Medico(Long id, String nome, String cnpj, String crm_estado, String crm_num, String telefone, String email, String especialidade, String sala, String login, String senha, List<String> data_disponivel, Date hora_inicial, Date hora_final, Long valor_consulta) {
+    public Medico(Long id, String nome, String cnpj, String crm_estado, String crm_num, String telefone, String email, String especialidade, String sala, String login, String senha, String[] diasDisponiveis, Time hora_inicial, Time hora_final, Long valor_consulta) {
         this.id = id;
         this.nome = nome;
         this.cnpj = cnpj;
@@ -121,7 +125,7 @@ public class Medico {
         this.sala = sala;
         this.login = login;
         this.senha = senha;
-        this.data_disponivel = data_disponivel;
+        this.diasDisponiveis = diasDisponiveis;
         this.hora_inicial = hora_inicial;
         this.hora_final = hora_final;
         this.valor_consulta = valor_consulta;
@@ -215,27 +219,27 @@ public class Medico {
         this.senha = senha;
     }
 
-    public List<String> getData_disponivel() {
-        return data_disponivel;
+    public String[] getDiasDisponiveis() {
+        return diasDisponiveis;
     }
 
-    public void setData_disponivel(List<String> data_disponivel) {
-        this.data_disponivel = data_disponivel;
+    public void setDiasDisponiveis(String[] diasDisponiveis) {
+        this.diasDisponiveis = diasDisponiveis;
     }
 
-    public Date getHora_inicial() {
+    public Time getHora_inicial() {
         return hora_inicial;
     }
 
-    public void setHora_inicial(Date hora_inicial) {
+    public void setHora_inicial(Time hora_inicial) {
         this.hora_inicial = hora_inicial;
     }
 
-    public Date getHora_final() {
+    public Time getHora_final() {
         return hora_final;
     }
 
-    public void setHora_final(Date hora_final) {
+    public void setHora_final(Time hora_final) {
         this.hora_final = hora_final;
     }
 
