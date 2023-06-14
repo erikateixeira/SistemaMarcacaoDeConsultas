@@ -20,13 +20,13 @@ public class PacienteService {
     PacienteRepository pacienteRepository;
 
     public ResponseEntity<Object> getAllByNome(String nome){
-        List<Paciente> pacienteList = pacienteRepository.findAllByNomeContaining(nome);
+        List<Paciente> pacienteList = pacienteRepository.findAllByNomeContainingIgnoreCase(nome);
 
         if(pacienteList.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Paciente não encontrado.");
         }
         else {
-            return ResponseEntity.status(HttpStatus.OK).body(pacienteRepository.findAllByNomeContaining(nome).stream().map(paciente -> new PacienteResponseDTO(paciente)));
+            return ResponseEntity.status(HttpStatus.OK).body(pacienteRepository.findAllByNomeContainingIgnoreCase(nome).stream().map(paciente -> new PacienteResponseDTO(paciente)));
         }
     }
 
@@ -40,7 +40,7 @@ public class PacienteService {
 
     @Transactional
     public ResponseEntity<Object> update(String nome, PacienteRequestDTO pacienteRequestDTO) {
-        Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContaining(nome);
+        Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContainingIgnoreCase(nome);
 
         if(pacienteOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Paciente não encontrado.");
@@ -110,7 +110,7 @@ public class PacienteService {
 
     @Transactional
     public ResponseEntity<Object> delete(String nome) {
-        Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContaining(nome);
+        Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContainingIgnoreCase(nome);
 
         if(pacienteOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Paciente não encontrado.");

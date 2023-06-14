@@ -10,8 +10,8 @@ import java.util.Optional;
 @Repository
 public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> {
 
-    List<Funcionario> findAllByNomeContaining(String nome);
+    List<Funcionario> findAllByNomeContainingIgnoreCase(String nome);
 
-    Optional<Funcionario> findByNomeContaining(String nome);
+    Optional<Funcionario> findByNomeContainingIgnoreCase(String nome);
 
 }

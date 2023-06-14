@@ -1,7 +1,9 @@
 package com.saper.sistemadeconsultas.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.saper.sistemadeconsultas.dto.FuncionarioResquestDTO;
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnTransformer;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Date;

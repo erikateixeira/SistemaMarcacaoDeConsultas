@@ -10,8 +10,8 @@ import java.util.Optional;
 @Repository
 public interface MedicoRepository extends JpaRepository<Medico, Long> {
 
-    List<Medico> findAllByNomeContaining(String nome);
+    List<Medico> findAllByNomeContainingIgnoreCase(String nome);
 
-    Optional<Medico> findByNomeContaining(String nome);
+    Optional<Medico> findByNomeContainingIgnoreCase(String nome);
 
 }

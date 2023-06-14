@@ -20,13 +20,13 @@ public class FuncionarioService {
     FuncionarioRepository funcionarioRepository;
 
     public ResponseEntity<Object> getAllByNome(String nome){
-        List<Funcionario> funcionarioList = funcionarioRepository.findAllByNomeContaining(nome);
+        List<Funcionario> funcionarioList = funcionarioRepository.findAllByNomeContainingIgnoreCase(nome);
 
         if(funcionarioList.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Funcionário não encontrado.");
         }
         else {
-            return ResponseEntity.status(HttpStatus.OK).body(funcionarioRepository.findAllByNomeContaining(nome).stream().map(funcionario -> new FuncionarioResponseDTO(funcionario)));
+            return ResponseEntity.status(HttpStatus.OK).body(funcionarioRepository.findAllByNomeContainingIgnoreCase(nome).stream().map(funcionario -> new FuncionarioResponseDTO(funcionario)));
         }
     }
 
@@ -40,7 +40,7 @@ public class FuncionarioService {
 
     @Transactional
     public ResponseEntity<Object> update(String nome, FuncionarioResquestDTO funcionarioResquestDTO) {
-        Optional<Funcionario> funcionarioOptional = funcionarioRepository.findByNomeContaining(nome);
+        Optional<Funcionario> funcionarioOptional = funcionarioRepository.findByNomeContainingIgnoreCase(nome);
 
         if(funcionarioOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Funcionário não encontrado.");
@@ -97,7 +97,7 @@ public class FuncionarioService {
 
     @Transactional
     public ResponseEntity<Object> delete(String nome) {
-        Optional<Funcionario> funcionarioOptional = funcionarioRepository.findByNomeContaining(nome);
+        Optional<Funcionario> funcionarioOptional = funcionarioRepository.findByNomeContainingIgnoreCase(nome);
 
         if(funcionarioOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Funcionário não encontrado.");

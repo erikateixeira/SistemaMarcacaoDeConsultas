@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -35,9 +36,9 @@ public class ConsultaService {
     @Autowired
     PacienteRepository pacienteRepository;
 
-    public ResponseEntity<Object> getAllConsultasDoMedicoPorDia(String nome, Date data) {
-        Optional<Medico> medicoOptional = medicoRepository.findByNomeContaining(nome);
-        List<Consulta> consultaList = consultaRepository.findByDataAndMedicoNomeContaining(data, nome);
+    public ResponseEntity<Object> getAllConsultasDoMedicoPorDia(String nome, LocalDate data) {
+        Optional<Medico> medicoOptional = medicoRepository.findByNomeContainingIgnoreCase(nome);
+        List<Consulta> consultaList = consultaRepository.findByDataAndMedicoNomeContainingIgnoreCase(data, nome);
 
         if (medicoOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Médico não encontrado.");
@@ -55,9 +56,9 @@ public class ConsultaService {
         }
     }
 
-    public ResponseEntity<Object> getAllConsultasDoMedicoParaConfirmacao(String nome, Date data) {
-        Optional<Medico> medicoOptional = medicoRepository.findByNomeContaining(nome);
-        List<Consulta> consultaList = consultaRepository.findByDataAndMedicoNomeContaining(data, nome);
+    public ResponseEntity<Object> getAllConsultasDoMedicoParaConfirmacao(String nome, LocalDate data) {
+        Optional<Medico> medicoOptional = medicoRepository.findByNomeContainingIgnoreCase(nome);
+        List<Consulta> consultaList = consultaRepository.findByDataAndMedicoNomeContainingIgnoreCase(data, nome);
 
         if (medicoOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Médico não encontrado.");
@@ -76,9 +77,9 @@ public class ConsultaService {
     }
 
 
-    public ResponseEntity<Object> getConsultaDoPacienteParaAtendimento(String nome, Date data) {
-        Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContaining(nome);
-        List<Consulta> consultaList = consultaRepository.findByDataAndPacienteNomeContaining(data, nome);
+    public ResponseEntity<Object> getConsultaDoPacienteParaAtendimento(String nome, LocalDate data) {
+        Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContainingIgnoreCase(nome);
+        List<Consulta> consultaList = consultaRepository.findByDataAndPacienteNomeContainingIgnoreCase(data, nome);
 
         if (pacienteOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Paciente não encontrado.");
@@ -100,11 +101,11 @@ public class ConsultaService {
     @Transactional
     public ResponseEntity<Object> save(ConsultaRequestDTO consultaRequestDTO){
 
-        Optional<Medico> medicoOptional = medicoRepository.findByNomeContaining(consultaRequestDTO.nome_medico);
+        Optional<Medico> medicoOptional = medicoRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_medico);
 
-        Optional<Funcionario> funcionarioOptional = funcionarioRepository.findByNomeContaining(consultaRequestDTO.nome_funcionario);
+        Optional<Funcionario> funcionarioOptional = funcionarioRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_funcionario);
 
-        Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContaining(consultaRequestDTO.nome_paciente);
+        Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_paciente);
 
         if(medicoOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Médico não encontrado.");
@@ -135,10 +136,10 @@ public class ConsultaService {
     }
 
     @Transactional
-    public ResponseEntity<Object> update(String nome_paciente, String nome_medico, Date data, ConsultaRequestDTO consultaRequestDTO) {
-        Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContaining(nome_paciente);
-        Optional<Medico> medicoOptional = medicoRepository.findByNomeContaining(nome_medico);
-        List<Consulta> consultaList = consultaRepository.findByDataAndMedicoNomeContaining(data, nome_medico);
+    public ResponseEntity<Object> update(String nome_paciente, String nome_medico, LocalDate data, ConsultaRequestDTO consultaRequestDTO) {
+        Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContainingIgnoreCase(nome_paciente);
+        Optional<Medico> medicoOptional = medicoRepository.findByNomeContainingIgnoreCase(nome_medico);
+        List<Consulta> consultaList = consultaRepository.findByDataAndMedicoNomeContainingIgnoreCase(data, nome_medico);
 
         if(pacienteOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Paciente não encontrado.");
@@ -162,7 +163,7 @@ public class ConsultaService {
                 consulta.setHora_consulta(consultaRequestDTO.hora_consulta);
             }
             if(consultaRequestDTO.nome_funcionario!=null){
-                Optional<Funcionario> funcionarioOptional = funcionarioRepository.findByNomeContaining(consultaRequestDTO.nome_funcionario);
+                Optional<Funcionario> funcionarioOptional = funcionarioRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_funcionario);
                 if(funcionarioOptional.isEmpty()){
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Funcionário não encontrado.");
                 }
@@ -176,10 +177,10 @@ public class ConsultaService {
     }
 
     @Transactional
-    public ResponseEntity<Object> delete(String nome_paciente, String nome_medico, Date data) {
-        Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContaining(nome_paciente);
-        Optional<Medico> medicoOptional = medicoRepository.findByNomeContaining(nome_medico);
-        List<Consulta> consultaList = consultaRepository.findByDataAndMedicoNomeContaining(data, nome_medico);
+    public ResponseEntity<Object> delete(String nome_paciente, String nome_medico, LocalDate data) {
+        Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContainingIgnoreCase(nome_paciente);
+        Optional<Medico> medicoOptional = medicoRepository.findByNomeContainingIgnoreCase(nome_medico);
+        List<Consulta> consultaList = consultaRepository.findByDataAndMedicoNomeContainingIgnoreCase(data, nome_medico);
 
         if (pacienteOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Paciente não encontrado.");
