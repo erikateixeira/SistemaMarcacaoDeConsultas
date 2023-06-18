@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +37,22 @@ public class ConsultaService {
 
     @Autowired
     PacienteRepository pacienteRepository;
+
+    public ResponseEntity<Object> getAllConsultasPorDia(LocalDate data) {
+        List<Consulta> consultaList = consultaRepository.findByData(data);
+
+        if (consultaList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existem consultas dessa data.");
+        }
+
+        else {
+            List<ConsultaResponseDTO> consultaResponseList = consultaList.stream()
+                    .map(consulta -> new ConsultaResponseDTO(consulta))
+                    .collect(Collectors.toList());
+            return ResponseEntity.status(HttpStatus.OK).body(consultaResponseList);
+        }
+    }
+
 
     public ResponseEntity<Object> getAllConsultasDoMedicoPorDia(String nome, LocalDate data) {
         Optional<Medico> medicoOptional = medicoRepository.findByNomeContainingIgnoreCase(nome);
@@ -123,7 +141,12 @@ public class ConsultaService {
 
         Consulta consulta = new Consulta();
         consulta.setData(consultaRequestDTO.data_consulta);
-        consulta.setHora_consulta(consultaRequestDTO.hora_consulta);
+
+        LocalDate data_consulta = consultaRequestDTO.getData_consulta();
+        LocalTime hora_consulta_isolada = consultaRequestDTO.getHora_consulta();
+        LocalDateTime hora_consulta = LocalDateTime.of(data_consulta, hora_consulta_isolada);
+        consulta.setHora_consulta(hora_consulta);
+
         consulta.setRetorno_consulta(consultaRequestDTO.retorno_consulta);
         consulta.setMedico(medicoOptional.get());
         consulta.setFuncionario(funcionarioOptional.get());
@@ -160,10 +183,14 @@ public class ConsultaService {
                 consulta.setData(consultaRequestDTO.data_consulta);
             }
             if(consultaRequestDTO.hora_consulta!=null){
-                consulta.setHora_consulta(consultaRequestDTO.hora_consulta);
+                LocalDate data_consulta = consultaRequestDTO.getData_consulta();
+                LocalTime hora_consulta_isolada = consultaRequestDTO.getHora_consulta();
+                LocalDateTime hora_consulta = LocalDateTime.of(data_consulta, hora_consulta_isolada);
+                consulta.setHora_consulta(hora_consulta);
             }
             if(consultaRequestDTO.nome_funcionario!=null){
                 Optional<Funcionario> funcionarioOptional = funcionarioRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_funcionario);
+
                 if(funcionarioOptional.isEmpty()){
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Funcionário não encontrado.");
                 }

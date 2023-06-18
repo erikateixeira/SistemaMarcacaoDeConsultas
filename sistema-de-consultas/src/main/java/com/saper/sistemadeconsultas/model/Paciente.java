@@ -99,7 +99,7 @@ public class Paciente {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate validade_plano;
 
-    @OneToMany(mappedBy = "paciente")
+    @OneToMany(mappedBy = "paciente", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     Set<Consulta> consultas;
 
     public Paciente() {

@@ -6,6 +6,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 
 @Entity
@@ -17,35 +19,35 @@ public class Consulta {
     private Long id;
 
     @Column(name= "data_consulta",nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate data;
 
     @Column(nullable = false)
-    private Time hora_consulta;
+    private LocalDateTime hora_consulta;
 
     @Column(nullable = false)
     private boolean retorno_consulta;
 
     @ManyToOne
-    @JoinColumn(name = "nome_medico", referencedColumnName = "nome_medico", nullable = false)
+    @JoinColumn(name = "id_medico", referencedColumnName = "id_medico")
     Medico medico;
 
     @ManyToOne
-    @JoinColumn(name = "nome_funcionario", referencedColumnName = "nome_funcionario", nullable = false)
+    @JoinColumn(name = "id_funcionario", referencedColumnName = "id_funcionario")
     Funcionario funcionario;
 
     @ManyToOne
-    @JoinColumn(name = "nome_paciente", referencedColumnName = "nome_paciente", nullable = false)
+    @JoinColumn(name = "id_paciente", referencedColumnName = "id_paciente")
     Paciente paciente;
 
 
     public Consulta() {
     }
 
-    public Consulta(Long id, LocalDate data, Time hora_consulta, boolean retorno_consulta, Medico medico, Funcionario funcionario, Paciente paciente) {
+    public Consulta(Long id, LocalDate data, LocalDateTime hora_consulta, boolean retorno_consulta, Medico medico, Funcionario funcionario, Paciente paciente) {
         this.id = id;
         this.data = data;
-        this.hora_consulta = new Time(hora_consulta.getTime());
+        this.hora_consulta = hora_consulta;
         this.retorno_consulta = retorno_consulta;
         this.medico = medico;
         this.funcionario = funcionario;
@@ -68,11 +70,11 @@ public class Consulta {
         this.data = data;
     }
 
-    public Time getHora_consulta() {
+    public LocalDateTime getHora_consulta() {
         return hora_consulta;
     }
 
-    public void setHora_consulta(Time hora_consulta) {
+    public void setHora_consulta(LocalDateTime hora_consulta) {
         this.hora_consulta = hora_consulta;
     }
 

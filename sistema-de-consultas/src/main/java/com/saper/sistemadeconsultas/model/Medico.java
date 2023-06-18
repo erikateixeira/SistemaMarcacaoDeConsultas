@@ -2,14 +2,21 @@ package com.saper.sistemadeconsultas.model;
 
 import com.saper.sistemadeconsultas.dto.MedicoRequestDTO;
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 import java.sql.Date;
 import java.sql.Time;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Medico {
@@ -70,19 +77,45 @@ public class Medico {
     private String senha;
 
     @Column(nullable = false)
-    private String[] diasDisponiveis;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+    private LocalDateTime hora_inicial;
 
     @Column(nullable = false)
-    private Time hora_inicial;
-
-    @Column(nullable = false)
-    private Time hora_final;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+    private LocalDateTime hora_final;
 
     @Column(nullable = false)
     private Long valor_consulta;
 
-    @OneToMany(mappedBy = "medico")
+    @OneToMany(mappedBy = "medico", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     Set<Consulta> consultas;
+
+    @ElementCollection(targetClass = DiaSemana.class)
+    @CollectionTable(name = "medico_dia_semana",
+            joinColumns = @JoinColumn(name = "id_medico", referencedColumnName = "id_medico"))
+    @Column(name = "dia_semana")
+    @Enumerated(EnumType.STRING)
+    private List<DiaSemana> diasDisponiveis;
+
+    public List<DiaSemana> getDiasDisponiveis() {
+        return diasDisponiveis;
+    }
+
+    public void setDiasDisponiveis(List<DiaSemana> diasDisponiveis) {
+        this.diasDisponiveis = diasDisponiveis;
+    }
+
+    public List<DiaSemana> convertDiasDisponiveis(List<String> diasDisponiveis) {
+        List<DiaSemana> diasSemanaEnum = new ArrayList<>();
+        for (DiaSemana diaSemana : DiaSemana.values()) {
+            if (diasDisponiveis.contains(diaSemana.toString())) {
+                diasSemanaEnum.add(diaSemana);
+            }
+        }
+        return diasSemanaEnum;
+    }
+
+
 
     public Medico() {
     }
@@ -98,11 +131,20 @@ public class Medico {
         this.sala = medicoRequestDTO.sala;
         this.login = medicoRequestDTO.login;
         this.senha = medicoRequestDTO.senha;
-        this.diasDisponiveis = medicoRequestDTO.diasDisponiveis;
-        this.hora_inicial = medicoRequestDTO.hora_inicial;
-        this.hora_final = medicoRequestDTO.hora_final;
-        this.valor_consulta = medicoRequestDTO.valor_consulta;
+        this.diasDisponiveis = convertDiasDisponiveis(medicoRequestDTO.diasDisponiveis);
 
+
+        LocalDate data_cadastro = LocalDate.now();
+
+        LocalTime hora_inicial_isolada = medicoRequestDTO.getHora_inicial();
+        LocalDateTime hora_inicial = LocalDateTime.of(data_cadastro, hora_inicial_isolada);
+        this.hora_inicial = hora_inicial;
+
+        LocalTime hora_final_isolada = medicoRequestDTO.getHora_final();
+        LocalDateTime hora_final = LocalDateTime.of(data_cadastro, hora_final_isolada);
+        this.hora_final = hora_final;
+
+        this.valor_consulta = medicoRequestDTO.valor_consulta;
     }
 
     public Set<Consulta> getConsultas() {
@@ -113,7 +155,8 @@ public class Medico {
         this.consultas = consultas;
     }
 
-    public Medico(Long id, String nome, String cnpj, String crm_estado, String crm_num, String telefone, String email, String especialidade, String sala, String login, String senha, String[] diasDisponiveis, Time hora_inicial, Time hora_final, Long valor_consulta) {
+
+    public Medico(Long id, String nome, String cnpj, String crm_estado, String crm_num, String telefone, String email, String especialidade, String sala, String login, String senha, LocalDateTime hora_inicial, LocalDateTime hora_final, Long valor_consulta) {
         this.id = id;
         this.nome = nome;
         this.cnpj = cnpj;
@@ -125,7 +168,6 @@ public class Medico {
         this.sala = sala;
         this.login = login;
         this.senha = senha;
-        this.diasDisponiveis = diasDisponiveis;
         this.hora_inicial = hora_inicial;
         this.hora_final = hora_final;
         this.valor_consulta = valor_consulta;
@@ -219,27 +261,19 @@ public class Medico {
         this.senha = senha;
     }
 
-    public String[] getDiasDisponiveis() {
-        return diasDisponiveis;
-    }
-
-    public void setDiasDisponiveis(String[] diasDisponiveis) {
-        this.diasDisponiveis = diasDisponiveis;
-    }
-
-    public Time getHora_inicial() {
+    public LocalDateTime getHora_inicial() {
         return hora_inicial;
     }
 
-    public void setHora_inicial(Time hora_inicial) {
+    public void setHora_inicial(LocalDateTime hora_inicial) {
         this.hora_inicial = hora_inicial;
     }
 
-    public Time getHora_final() {
+    public LocalDateTime getHora_final() {
         return hora_final;
     }
 
-    public void setHora_final(Time hora_final) {
+    public void setHora_final(LocalDateTime hora_final) {
         this.hora_final = hora_final;
     }
 

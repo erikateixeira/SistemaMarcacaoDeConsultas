@@ -2,22 +2,36 @@ package com.saper.sistemadeconsultas.service;
 
 import com.saper.sistemadeconsultas.dto.FuncionarioResponseDTO;
 import com.saper.sistemadeconsultas.dto.FuncionarioResquestDTO;
+import com.saper.sistemadeconsultas.model.Consulta;
 import com.saper.sistemadeconsultas.model.Funcionario;
+import com.saper.sistemadeconsultas.model.Paciente;
+import com.saper.sistemadeconsultas.repository.ConsultaRepository;
 import com.saper.sistemadeconsultas.repository.FuncionarioRepository;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import jakarta.websocket.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.sql.Connection;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class FuncionarioService {
 
     @Autowired
     FuncionarioRepository funcionarioRepository;
+
+    @Autowired
+    ConsultaRepository consultaRepository;
 
     public ResponseEntity<Object> getAllByNome(String nome){
         List<Funcionario> funcionarioList = funcionarioRepository.findAllByNomeContainingIgnoreCase(nome);
@@ -37,6 +51,7 @@ public class FuncionarioService {
 
         return ResponseEntity.status(HttpStatus.OK).body(new FuncionarioResponseDTO(funcionarioRepository.save(funcionario)));
     }
+
 
     @Transactional
     public ResponseEntity<Object> update(String nome, FuncionarioResquestDTO funcionarioResquestDTO) {
@@ -103,7 +118,19 @@ public class FuncionarioService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Funcionário não encontrado.");
         }
         else {
-            funcionarioRepository.delete(funcionarioOptional.get());
+            Funcionario funcionario = funcionarioOptional.get();
+            Set<Consulta> consultas = funcionario.getConsultas();
+
+            for (Consulta consulta : consultas) {
+                consulta.setFuncionario(null);
+                consultaRepository.save(consulta);
+            }
+
+            funcionarioRepository.delete(funcionario);
+
+            for (Consulta consulta : consultas) {
+                consultaRepository.save(consulta);
+            }
 
             return ResponseEntity.status(HttpStatus.OK).build();
         }

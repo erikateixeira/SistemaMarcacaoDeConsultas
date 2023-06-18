@@ -2,7 +2,10 @@ package com.saper.sistemadeconsultas.service;
 
 import com.saper.sistemadeconsultas.dto.PacienteRequestDTO;
 import com.saper.sistemadeconsultas.dto.PacienteResponseDTO;
+import com.saper.sistemadeconsultas.model.Consulta;
+import com.saper.sistemadeconsultas.model.Medico;
 import com.saper.sistemadeconsultas.model.Paciente;
+import com.saper.sistemadeconsultas.repository.ConsultaRepository;
 import com.saper.sistemadeconsultas.repository.PacienteRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +15,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class PacienteService {
 
     @Autowired
     PacienteRepository pacienteRepository;
+
+    @Autowired
+    ConsultaRepository consultaRepository;
 
     public ResponseEntity<Object> getAllByNome(String nome){
         List<Paciente> pacienteList = pacienteRepository.findAllByNomeContainingIgnoreCase(nome);
@@ -116,7 +123,19 @@ public class PacienteService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Paciente não encontrado.");
         }
         else {
-            pacienteRepository.delete(pacienteOptional.get());
+            Paciente paciente = pacienteOptional.get();
+            Set<Consulta> consultas = paciente.getConsultas();
+
+            for (Consulta consulta : consultas) {
+                consulta.setPaciente(null);
+                consultaRepository.save(consulta);
+            }
+
+            pacienteRepository.delete(paciente);
+
+            for (Consulta consulta : consultas) {
+                consultaRepository.save(consulta);
+            }
 
             return ResponseEntity.status(HttpStatus.OK).build();
         }

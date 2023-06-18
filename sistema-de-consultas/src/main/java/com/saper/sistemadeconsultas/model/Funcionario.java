@@ -90,7 +90,7 @@ public class Funcionario {
             length = 15)
     private String senha;
 
-    @OneToMany(mappedBy = "funcionario")
+    @OneToMany(mappedBy = "funcionario", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     Set<Consulta> consultas;
 
     public Funcionario() {

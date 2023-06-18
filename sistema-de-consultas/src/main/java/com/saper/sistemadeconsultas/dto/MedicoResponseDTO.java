@@ -1,9 +1,13 @@
 package com.saper.sistemadeconsultas.dto;
 
+import com.saper.sistemadeconsultas.model.DiaSemana;
 import com.saper.sistemadeconsultas.model.Medico;
 
 
-import java.sql.Time;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MedicoResponseDTO {
 
@@ -17,10 +21,18 @@ public class MedicoResponseDTO {
     public String especialidade;
     public String sala;
     public String login;
-    public String[] diasDisponiveis;
-    public Time hora_inicial;
-    public Time hora_final;
+    public List<String> diasDisponiveis;
+    public LocalTime hora_inicial;
+    public LocalTime hora_final;
     public Long valor_consulta;
+
+    public List<String> convertDiasSemana(List<DiaSemana> diasSemanaEnum) {
+        List<String> diasDisponiveis = new ArrayList<>();
+        for (DiaSemana diaSemana : diasSemanaEnum) {
+            diasDisponiveis.add(diaSemana.toString());
+        }
+        return diasDisponiveis;
+    }
 
     public MedicoResponseDTO(Medico medico) {
         this.id = medico.getId();
@@ -32,10 +44,17 @@ public class MedicoResponseDTO {
         this.email = medico.getEmail();
         this.especialidade = medico.getEspecialidade();
         this.sala = medico.getSala();
-        this.login = medico.getSala();
-        this.diasDisponiveis = medico.getDiasDisponiveis();
-        this.hora_inicial = medico.getHora_inicial();
-        this.hora_final = medico.getHora_final();
+        this.login = medico.getLogin();
+        this.diasDisponiveis = convertDiasSemana(medico.getDiasDisponiveis());
+
+        LocalDateTime hora_inicial = medico.getHora_inicial();
+        LocalTime hora_inicial_sozinha = hora_inicial.toLocalTime();
+        this.hora_inicial= hora_inicial_sozinha;
+
+        LocalDateTime hora_final = medico.getHora_final();
+        LocalTime hora_final_sozinha = hora_final.toLocalTime();
+        this.hora_final= hora_final_sozinha;
+
         this.valor_consulta = medico.getValor_consulta();
     }
 

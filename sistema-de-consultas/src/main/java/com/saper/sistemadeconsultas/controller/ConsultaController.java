@@ -16,8 +16,13 @@ public class ConsultaController {
     @Autowired
     ConsultaService consultaService;
 
+    @GetMapping("/dia")
+    public Object getAllConsultasPorDia(@RequestParam(name = "data") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate data){
+        return consultaService.getAllConsultasPorDia(data);
+    }
+
     @GetMapping("/lista")
-    public Object ggetAllConsultasDoMedicoPorDia(@RequestParam(name = "nome", defaultValue = "") String nome,
+    public Object getAllConsultasDoMedicoPorDia(@RequestParam(name = "nome", defaultValue = "") String nome,
                                                  @RequestParam(name = "data") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate data) {
         return consultaService.getAllConsultasDoMedicoPorDia(nome, data);
     }

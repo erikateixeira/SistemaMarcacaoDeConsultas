@@ -1,7 +1,9 @@
 package com.saper.sistemadeconsultas.service;
 
 import com.saper.sistemadeconsultas.dto.*;
+import com.saper.sistemadeconsultas.model.Consulta;
 import com.saper.sistemadeconsultas.model.Medico;
+import com.saper.sistemadeconsultas.repository.ConsultaRepository;
 import com.saper.sistemadeconsultas.repository.MedicoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,15 +12,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class MedicoService {
 
     @Autowired
     MedicoRepository medicoRepository;
+
+    @Autowired
+    ConsultaRepository consultaRepository;
+
 
     public ResponseEntity<Object> getAllByNome(String nome){
         List<Medico> medicoList = medicoRepository.findAllByNomeContainingIgnoreCase(nome);
@@ -35,6 +43,7 @@ public class MedicoService {
     public ResponseEntity<Object> save(MedicoRequestDTO medicoRequestDTO) {
 
         Medico medico = new Medico(medicoRequestDTO);
+
 
         return ResponseEntity.status(HttpStatus.OK).body(new MedicoResponseDTO(medicoRepository.save(medico)));
     }
@@ -80,13 +89,19 @@ public class MedicoService {
                 medico.setSenha(medicoRequestDTO.senha);
             }
             if(medicoRequestDTO.diasDisponiveis!=null){
-                medico.setDiasDisponiveis(medicoRequestDTO.diasDisponiveis);
+                medico.setDiasDisponiveis(medico.convertDiasDisponiveis(medicoRequestDTO.diasDisponiveis));
             }
             if(medicoRequestDTO.hora_inicial!=null){
-                medico.setHora_inicial(medicoRequestDTO.hora_inicial);
+                LocalDate data_atualizacao = LocalDate.now();
+                LocalTime hora_inicial_isolada = medicoRequestDTO.getHora_inicial();
+                LocalDateTime hora_inicial = LocalDateTime.of(data_atualizacao, hora_inicial_isolada);
+                medico.setHora_inicial(hora_inicial);
             }
             if(medicoRequestDTO.hora_final!=null){
-                medico.setHora_final(medicoRequestDTO.hora_final);
+                LocalDate data_atualizacao = LocalDate.now();
+                LocalTime hora_final_isolada = medicoRequestDTO.getHora_final();
+                LocalDateTime hora_final = LocalDateTime.of(data_atualizacao, hora_final_isolada);
+                medico.setHora_final(hora_final);
             }
             if(medicoRequestDTO.valor_consulta!=null){
                 medico.setValor_consulta(medicoRequestDTO.valor_consulta);
@@ -100,19 +115,28 @@ public class MedicoService {
     public ResponseEntity<Object> delete(String nome) {
         Optional<Medico> medicoOptional = medicoRepository.findByNomeContainingIgnoreCase(nome);
 
-        if(medicoOptional.isEmpty()){
+        if (medicoOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Médico não encontrado.");
         }
         else {
-            medicoRepository.delete(medicoOptional.get());
+            Medico medico = medicoOptional.get();
+            Set<Consulta> consultas = medico.getConsultas();
+
+            for (Consulta consulta : consultas) {
+                consulta.setMedico(null);
+                consultaRepository.save(consulta);
+            }
+
+            medicoRepository.delete(medico);
+
+            for (Consulta consulta : consultas) {
+                consultaRepository.save(consulta);
+            }
 
             return ResponseEntity.status(HttpStatus.OK).build();
         }
+
     }
-
-
-
-
 
 
 }
