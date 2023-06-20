@@ -115,6 +115,27 @@ public class ConsultaService {
         }
     }
 
+    public ResponseEntity<Object> getConsultasDoPaciente(String nome) {
+        Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContainingIgnoreCase(nome);
+        List<Consulta> consultaList = consultaRepository.findByPacienteNomeContainingIgnoreCase(nome);
+
+        if (pacienteOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Paciente não encontrado.");
+        }
+
+        if (consultaList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existem consultas para o paciente especificado.");
+        }
+
+        else {
+            List<ConsultaResponseDTO> consultaResponseList = consultaList.stream()
+                    .map(consulta -> new ConsultaResponseDTO(consulta))
+                    .collect(Collectors.toList());
+            return ResponseEntity.status(HttpStatus.OK).body(consultaResponseList);
+        }
+    }
+
+
 
     @Transactional
     public ResponseEntity<Object> save(ConsultaRequestDTO consultaRequestDTO){

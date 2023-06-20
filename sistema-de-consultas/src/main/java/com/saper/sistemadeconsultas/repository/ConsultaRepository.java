@@ -17,6 +17,7 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
     List<Consulta> findByData(LocalDate data);
     List<Consulta> findByDataAndMedicoNomeContainingIgnoreCase(LocalDate data, String nome);
     List<Consulta> findByDataAndPacienteNomeContainingIgnoreCase(LocalDate data, String nome);
+    List<Consulta> findByPacienteNomeContainingIgnoreCase(String nome);
 
 
 }

@@ -39,6 +39,11 @@ public class ConsultaController {
         return consultaService.getConsultaDoPacienteParaAtendimento(nome, data);
     }
 
+    @GetMapping("/paciente")
+    public Object getConsultaDoPacienteParaAtendimento(@RequestParam(name = "nome", defaultValue = "") String nome) {
+        return consultaService.getConsultasDoPaciente(nome);
+    }
+
     @PostMapping
     public Object save(@RequestBody ConsultaRequestDTO consultaRequestDTO) {
         return consultaService.save(consultaRequestDTO);
