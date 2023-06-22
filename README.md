@@ -7,7 +7,7 @@
 * Hellry Robert Oliveira Souza
 
 # Logomarca
-![Première Santé](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/assets/131729762/9235bb42-509c-4787-9f16-1e95a327e982)
+![Première Santé](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/blob/3250534466fce7b9a3e21f57539394a2ca5216bf/imagens/Premi%C3%A8re%20Sant%C3%A9.jpg)
 
 # Identidade Visual
 [BRANDING](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/files/11655169/A.MARCA.pdf)
@@ -20,17 +20,17 @@
 
 # Diagrama de Classe
 
-![Diagrama de Classe - Sistema de Marcação de Consultas](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/assets/131728883/a069610c-16de-49bb-94a9-08b50284a2bf)
+![Diagrama de Classe - Sistema de Marcação de Consultas](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/blob/3250534466fce7b9a3e21f57539394a2ca5216bf/imagens/Diagrama%20de%20Classe%20-%20Sistema%20de%20Marca%C3%A7%C3%A3o%20de%20Consultas.jpg)
 
 # Diagrama de Entidade-Relacional
 
-![Diagrama de Entidade-Relacionamento - Sistema de Marcação de Consultas](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/assets/131728883/d4709904-c17a-4908-bc93-59d61628540a)
+![Diagrama de Entidade-Relacionamento - Sistema de Marcação de Consultas](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/blob/3250534466fce7b9a3e21f57539394a2ca5216bf/imagens/Diagrama%20de%20Entidade-Relacionamento%20-%20Sistema%20de%20Marca%C3%A7%C3%A3o%20de%20Consultas.jpg)
 
   
 # Script SQL de criação do banco de dados do projeto
 * Modelo de banco de dados
 
-![Modelo de banco de dados](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/assets/131728883/4408b041-c8b1-4c0b-a8dd-d75a5d4c0111)
+![Modelo de banco de dados](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/blob/3250534466fce7b9a3e21f57539394a2ca5216bf/imagens/Modelo%20de%20banco%20de%20dados.jpg)
 
 * Scripts SQL nas versões MySQL e Oracle
 <p> Versões editáveis (.sql) disponíveis no main - Necessário utilizar o software MySQL Workbench ou Oracle Database e Oracle SQL Developer </p>
