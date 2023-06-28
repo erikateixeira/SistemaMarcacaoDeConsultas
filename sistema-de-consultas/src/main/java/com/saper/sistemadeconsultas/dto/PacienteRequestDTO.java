@@ -1,12 +1,13 @@
 package com.saper.sistemadeconsultas.dto;
 
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.sql.Date;
 import java.time.LocalDate;
 
 public class PacienteRequestDTO {
 
-    public String nome_id;
     public String nome;
     public String cpf;
     public String passaporte;

@@ -22,14 +22,14 @@ public class PacienteController {
         return pacienteService.save(pacienteRequestDTO);
     }
 
-    @PutMapping("/{nome}")
-    public Object update(@PathVariable(name = "nome") String nome,
+    @PutMapping
+    public Object update(@RequestParam(name = "nome", defaultValue = "") String nome,
                          @RequestBody PacienteRequestDTO pacienteRequestDTO){
         return pacienteService.update(nome, pacienteRequestDTO);
     }
 
-    @DeleteMapping("/{nome}")
-    public Object delete(@PathVariable(name = "nome") String nome){
+    @DeleteMapping
+    public Object delete(@RequestParam(name = "nome", defaultValue = "") String nome){
         return pacienteService.delete(nome);
     }
 

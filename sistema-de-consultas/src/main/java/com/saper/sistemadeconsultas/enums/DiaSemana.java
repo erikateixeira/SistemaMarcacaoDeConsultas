@@ -1,4 +1,4 @@
-package com.saper.sistemadeconsultas.model;
+package com.saper.sistemadeconsultas.enums;
 
 public enum DiaSemana {
 

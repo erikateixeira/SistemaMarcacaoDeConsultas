@@ -17,11 +17,6 @@ public class Paciente {
     @Column(name = "id_paciente")
     private Long id;
 
-    @Column(name = "nome_identidade",
-            nullable = false,
-            length = 80)
-    private String nome_id;
-
     @Column(name = "nome_paciente",
             unique = true,
             nullable = false,
@@ -41,7 +36,6 @@ public class Paciente {
     @Column(name = "data_nascimento_paciente",
             nullable = false,
             length = 10) //  21/07/1998
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate data_nascimento;
 
     @Column(length = 80)
@@ -106,7 +100,6 @@ public class Paciente {
     }
 
     public Paciente(PacienteRequestDTO pacienteRequestDTO){
-        this.nome_id = pacienteRequestDTO.nome_id;
         this.nome = pacienteRequestDTO.nome;
         this.cpf = pacienteRequestDTO.cpf;
         this.passaporte = pacienteRequestDTO.passaporte;
@@ -134,9 +127,8 @@ public class Paciente {
         this.consultas = consultas;
     }
 
-    public Paciente(Long id, String nome_id, String nome, String cpf, String passaporte, LocalDate data_nascimento, String nome_responsavel, String cpf_responsavel, String genero, String endereco, String cep, String bairro, String cidade, String estado, String telefone, String email, String plano_saude, Long num_plano, LocalDate validade_plano) {
+    public Paciente(Long id, String nome, String cpf, String passaporte, LocalDate data_nascimento, String nome_responsavel, String cpf_responsavel, String genero, String endereco, String cep, String bairro, String cidade, String estado, String telefone, String email, String plano_saude, Long num_plano, LocalDate validade_plano) {
         this.id = id;
-        this.nome_id = nome_id;
         this.nome = nome;
         this.cpf = cpf;
         this.passaporte = passaporte;
@@ -162,14 +154,6 @@ public class Paciente {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getNome_id() {
-        return nome_id;
-    }
-
-    public void setNome_id(String nome_id) {
-        this.nome_id = nome_id;
     }
 
     public String getNome() {

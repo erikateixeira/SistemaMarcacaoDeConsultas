@@ -5,13 +5,17 @@ import com.saper.sistemadeconsultas.dto.FuncionarioResquestDTO;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnTransformer;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Set;
 
 @Entity
-public class Funcionario {
+public class Funcionario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -87,11 +91,19 @@ public class Funcionario {
     private String login;
 
     @Column(name = "senha_funcionario",
-            length = 15)
+            length = 80)
     private String senha;
 
     @OneToMany(mappedBy = "funcionario", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     Set<Consulta> consultas;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "funcionario_role",
+            joinColumns = @JoinColumn(name = "id_funcionario"),
+            inverseJoinColumns = @JoinColumn(name = "id_role")
+    )
+    Set<Role> roles;
 
     public Funcionario() {
     }
@@ -110,7 +122,7 @@ public class Funcionario {
         this.email = funcionarioResquestDTO.email;
         this.funcao = funcionarioResquestDTO.funcao;
         this.login = funcionarioResquestDTO.login;
-        this.senha = funcionarioResquestDTO.senha;
+        this.senha = new BCryptPasswordEncoder().encode(funcionarioResquestDTO.senha);
     }
 
     public Set<Consulta> getConsultas() {
@@ -258,4 +270,45 @@ public class Funcionario {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    @Override
+    public String getPassword() {
+        return senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return login;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+
 }

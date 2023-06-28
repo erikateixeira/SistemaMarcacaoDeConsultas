@@ -1,10 +1,13 @@
 package com.saper.sistemadeconsultas.service;
 
 import com.saper.sistemadeconsultas.dto.*;
+import com.saper.sistemadeconsultas.enums.RoleNames;
 import com.saper.sistemadeconsultas.model.Consulta;
 import com.saper.sistemadeconsultas.model.Medico;
+import com.saper.sistemadeconsultas.model.Role;
 import com.saper.sistemadeconsultas.repository.ConsultaRepository;
 import com.saper.sistemadeconsultas.repository.MedicoRepository;
+import com.saper.sistemadeconsultas.repository.RoleRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -26,6 +30,9 @@ public class MedicoService {
 
     @Autowired
     ConsultaRepository consultaRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
 
 
     public ResponseEntity<Object> getAllByNome(String nome){
@@ -44,6 +51,7 @@ public class MedicoService {
 
         Medico medico = new Medico(medicoRequestDTO);
 
+        setRoleAsMedico(medico);
 
         return ResponseEntity.status(HttpStatus.OK).body(new MedicoResponseDTO(medicoRepository.save(medico)));
     }
@@ -137,6 +145,14 @@ public class MedicoService {
         }
 
     }
+
+    public void setRoleAsMedico(Medico medico){
+        Optional<Role> optionalRole = roleRepository.findByRole(RoleNames.ROLE_MEDICO);
+        Set<Role> setRole = new HashSet<>();
+        setRole.add(optionalRole.get());
+        medico.setRoles(setRole);
+    }
+
 
 
 }

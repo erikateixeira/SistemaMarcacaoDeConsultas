@@ -2,11 +2,11 @@ package com.saper.sistemadeconsultas.service;
 
 import com.saper.sistemadeconsultas.dto.FuncionarioResponseDTO;
 import com.saper.sistemadeconsultas.dto.FuncionarioResquestDTO;
-import com.saper.sistemadeconsultas.model.Consulta;
-import com.saper.sistemadeconsultas.model.Funcionario;
-import com.saper.sistemadeconsultas.model.Paciente;
+import com.saper.sistemadeconsultas.enums.RoleNames;
+import com.saper.sistemadeconsultas.model.*;
 import com.saper.sistemadeconsultas.repository.ConsultaRepository;
 import com.saper.sistemadeconsultas.repository.FuncionarioRepository;
+import com.saper.sistemadeconsultas.repository.RoleRepository;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -32,6 +33,10 @@ public class FuncionarioService {
 
     @Autowired
     ConsultaRepository consultaRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
+
 
     public ResponseEntity<Object> getAllByNome(String nome){
         List<Funcionario> funcionarioList = funcionarioRepository.findAllByNomeContainingIgnoreCase(nome);
@@ -48,6 +53,16 @@ public class FuncionarioService {
     public ResponseEntity<Object> save(FuncionarioResquestDTO funcionarioResquestDTO) {
 
         Funcionario funcionario = new Funcionario(funcionarioResquestDTO);
+
+        if (funcionarioResquestDTO.funcao.equals("ADMIN")){
+            setRoleAsAdmin(funcionario);
+        }
+        if(funcionarioResquestDTO.funcao.equals("RECEPCIONISTA")){
+            setRoleAsRecepcionista(funcionario);
+        }
+        if(funcionarioResquestDTO.funcao.equals("AUXILIAR")){
+            setRoleAsAuxiliar(funcionario);
+        }
 
         return ResponseEntity.status(HttpStatus.OK).body(new FuncionarioResponseDTO(funcionarioRepository.save(funcionario)));
     }
@@ -96,9 +111,21 @@ public class FuncionarioService {
             if(funcionarioResquestDTO.email!=null){
                 funcionario.setEmail(funcionarioResquestDTO.email);
             }
+
             if(funcionarioResquestDTO.funcao!=null){
                 funcionario.setFuncao(funcionarioResquestDTO.funcao);
+
+                if (funcionarioResquestDTO.funcao.equals("ADMIN")){
+                    setRoleAsAdmin(funcionario);
+                }
+                if(funcionarioResquestDTO.funcao.equals("RECEPCIONISTA")){
+                    setRoleAsRecepcionista(funcionario);
+                }
+                if(funcionarioResquestDTO.funcao.equals("AUXILIAR")){
+                    setRoleAsAuxiliar(funcionario);
+                }
             }
+
             if(funcionarioResquestDTO.login!=null){
                 funcionario.setLogin(funcionarioResquestDTO.login);
             }
@@ -134,6 +161,27 @@ public class FuncionarioService {
 
             return ResponseEntity.status(HttpStatus.OK).build();
         }
+    }
+
+    public void setRoleAsAdmin(Funcionario funcionario){
+        Optional<Role> optionalRole = roleRepository.findByRole(RoleNames.ROLE_ADMIN);
+        Set<Role> setRole = new HashSet<>();
+        setRole.add(optionalRole.get());
+        funcionario.setRoles(setRole);
+    }
+
+    public void setRoleAsRecepcionista(Funcionario funcionario){
+        Optional<Role> optionalRole = roleRepository.findByRole(RoleNames.ROLE_RECEPCIONISTA);
+        Set<Role> setRole = new HashSet<>();
+        setRole.add(optionalRole.get());
+        funcionario.setRoles(setRole);
+    }
+
+    public void setRoleAsAuxiliar(Funcionario funcionario){
+        Optional<Role> optionalRole = roleRepository.findByRole(RoleNames.ROLE_AUXILIAR);
+        Set<Role> setRole = new HashSet<>();
+        setRole.add(optionalRole.get());
+        funcionario.setRoles(setRole);
     }
 
 

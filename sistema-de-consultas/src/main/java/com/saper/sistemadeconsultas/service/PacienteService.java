@@ -55,9 +55,6 @@ public class PacienteService {
         else {
             Paciente paciente = pacienteOptional.get();
 
-            if(pacienteRequestDTO.nome_id!=null){
-                paciente.setNome_id(pacienteRequestDTO.nome_id);
-            }
             if(pacienteRequestDTO.nome!=null){
                 paciente.setNome(pacienteRequestDTO.nome);
             }

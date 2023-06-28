@@ -1,5 +1,7 @@
 package com.saper.sistemadeconsultas.model;
 
+import com.saper.sistemadeconsultas.dto.ConsultaRequestDTO;
+import com.saper.sistemadeconsultas.dto.MedicoRequestDTO;
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -40,6 +42,18 @@ public class Consulta {
     @JoinColumn(name = "id_paciente", referencedColumnName = "id_paciente")
     Paciente paciente;
 
+    @OneToOne(mappedBy = "consulta", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name = "id_prontuario")
+    Prontuario prontuario;
+
+    public Prontuario getProntuario() {
+        return prontuario;
+    }
+
+    public void setProntuario(Prontuario prontuario) {
+
+        this.prontuario = prontuario;
+    }
 
     public Consulta() {
     }

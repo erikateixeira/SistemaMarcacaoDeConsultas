@@ -3,23 +3,20 @@ package com.saper.sistemadeconsultas.model;
 import com.saper.sistemadeconsultas.dto.MedicoRequestDTO;
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import com.saper.sistemadeconsultas.enums.DiaSemana;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
-import java.sql.Date;
-import java.sql.Time;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
+
 
 @Entity
-public class Medico {
+public class Medico implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,7 +70,7 @@ public class Medico {
 
     @Column(name = "senha_medico",
             nullable = false,
-            length = 15)
+            length = 60)
     private String senha;
 
     @Column(nullable = false)
@@ -96,6 +93,14 @@ public class Medico {
     @Column(name = "dia_semana")
     @Enumerated(EnumType.STRING)
     private List<DiaSemana> diasDisponiveis;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "medico_role",
+            joinColumns = @JoinColumn(name = "id_medico"),
+            inverseJoinColumns = @JoinColumn(name = "id_role")
+    )
+    Set<Role> roles;
 
     public List<DiaSemana> getDiasDisponiveis() {
         return diasDisponiveis;
@@ -130,7 +135,7 @@ public class Medico {
         this.especialidade = medicoRequestDTO.especialidade;
         this.sala = medicoRequestDTO.sala;
         this.login = medicoRequestDTO.login;
-        this.senha = medicoRequestDTO.senha;
+        this.senha = new BCryptPasswordEncoder().encode(medicoRequestDTO.senha);
         this.diasDisponiveis = convertDiasDisponiveis(medicoRequestDTO.diasDisponiveis);
 
 
@@ -284,4 +289,45 @@ public class Medico {
     public void setValor_consulta(Long valor_consulta) {
         this.valor_consulta = valor_consulta;
     }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    @Override
+    public String getPassword() {
+        return senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return login;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+
 }

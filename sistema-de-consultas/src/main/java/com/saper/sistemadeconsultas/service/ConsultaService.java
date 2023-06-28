@@ -67,8 +67,8 @@ public class ConsultaService {
         }
 
         else {
-            List<ConsultaResponseDTO> consultaResponseList = consultaList.stream()
-                    .map(consulta -> new ConsultaResponseDTO(consulta))
+            List<ConsultaResponseMedicoDTO> consultaResponseList = consultaList.stream()
+                    .map(consulta -> new ConsultaResponseMedicoDTO(consulta))
                     .collect(Collectors.toList());
             return ResponseEntity.status(HttpStatus.OK).body(consultaResponseList);
         }

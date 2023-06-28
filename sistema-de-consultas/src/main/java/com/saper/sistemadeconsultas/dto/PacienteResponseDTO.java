@@ -9,7 +9,6 @@ import java.time.LocalDate;
 public class PacienteResponseDTO {
 
     public Long id;
-    public String nome_id;
     public String nome;
     public String cpf;
     public String passaporte;
@@ -30,7 +29,6 @@ public class PacienteResponseDTO {
 
     public PacienteResponseDTO(Paciente paciente){
         this.id = paciente.getId();
-        this.nome_id = paciente.getNome_id();
         this.nome = paciente.getNome();
         this.cpf = paciente.getCpf();
         this.passaporte = paciente.getPassaporte();

@@ -1,6 +1,6 @@
 package com.saper.sistemadeconsultas.dto;
 
-import com.saper.sistemadeconsultas.model.DiaSemana;
+import com.saper.sistemadeconsultas.enums.DiaSemana;
 import com.saper.sistemadeconsultas.model.Medico;
 
 
