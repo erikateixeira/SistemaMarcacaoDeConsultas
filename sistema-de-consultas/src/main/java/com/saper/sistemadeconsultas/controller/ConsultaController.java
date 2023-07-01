@@ -3,6 +3,7 @@ package com.saper.sistemadeconsultas.controller;
 import com.saper.sistemadeconsultas.dto.ConsultaRequestDTO;
 import com.saper.sistemadeconsultas.dto.FuncionarioResquestDTO;
 import com.saper.sistemadeconsultas.service.ConsultaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -40,12 +41,12 @@ public class ConsultaController {
     }
 
     @GetMapping("/paciente")
-    public Object getConsultaDoPacienteParaAtendimento(@RequestParam(name = "nome", defaultValue = "") String nome) {
+    public Object getConsultaDoPaciente(@RequestParam(name = "nome", defaultValue = "") String nome) {
         return consultaService.getConsultasDoPaciente(nome);
     }
 
     @PostMapping
-    public Object save(@RequestBody ConsultaRequestDTO consultaRequestDTO) {
+    public Object save(@Valid @RequestBody ConsultaRequestDTO consultaRequestDTO) {
         return consultaService.save(consultaRequestDTO);
     }
 
@@ -53,7 +54,7 @@ public class ConsultaController {
     public Object update(@RequestParam(name = "nome_paciente", defaultValue = "") String nome_paciente,
                          @RequestParam(name = "nome_medico", defaultValue = "") String nome_medico,
                          @RequestParam(name = "data") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate data,
-                         @RequestBody ConsultaRequestDTO consultaRequestDTO){
+                         @Valid @RequestBody ConsultaRequestDTO consultaRequestDTO){
         return consultaService.update(nome_paciente, nome_medico, data, consultaRequestDTO);
     }
 

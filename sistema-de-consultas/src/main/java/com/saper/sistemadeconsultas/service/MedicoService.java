@@ -12,11 +12,13 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +35,17 @@ public class MedicoService {
 
     @Autowired
     RoleRepository roleRepository;
+
+    public ResponseEntity<Object> getOnlyNome(String nome){
+        List<Medico> medicoList = medicoRepository.findAllByNomeContainingIgnoreCase(nome);
+
+        if(medicoList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Médico não encontrado.");
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body(medicoRepository.findAllByNomeContainingIgnoreCase(nome).stream().map(medico -> new MedicoResponseNomeDTO(medico)));
+        }
+    }
 
 
     public ResponseEntity<Object> getAllByNome(String nome){
@@ -94,20 +107,26 @@ public class MedicoService {
                 medico.setLogin(medicoRequestDTO.login);
             }
             if(medicoRequestDTO.senha!=null){
-                medico.setSenha(medicoRequestDTO.senha);
+                medico.setSenha(new BCryptPasswordEncoder().encode(medicoRequestDTO.senha));
             }
             if(medicoRequestDTO.diasDisponiveis!=null){
                 medico.setDiasDisponiveis(medico.convertDiasDisponiveis(medicoRequestDTO.diasDisponiveis));
             }
             if(medicoRequestDTO.hora_inicial!=null){
                 LocalDate data_atualizacao = LocalDate.now();
-                LocalTime hora_inicial_isolada = medicoRequestDTO.getHora_inicial();
+
+                String hora_inicial_string = medicoRequestDTO.getHora_inicial();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                LocalTime hora_inicial_isolada = LocalTime.parse(hora_inicial_string);
                 LocalDateTime hora_inicial = LocalDateTime.of(data_atualizacao, hora_inicial_isolada);
                 medico.setHora_inicial(hora_inicial);
             }
             if(medicoRequestDTO.hora_final!=null){
                 LocalDate data_atualizacao = LocalDate.now();
-                LocalTime hora_final_isolada = medicoRequestDTO.getHora_final();
+
+                String hora_final_string = medicoRequestDTO.getHora_final();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                LocalTime hora_final_isolada = LocalTime.parse(hora_final_string);
                 LocalDateTime hora_final = LocalDateTime.of(data_atualizacao, hora_final_isolada);
                 medico.setHora_final(hora_final);
             }

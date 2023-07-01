@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Set;
 
@@ -72,7 +73,7 @@ public class Funcionario implements UserDetails {
     @Column(name = "telefone_funcionario",
             nullable = false,
             unique = true,
-            length = 16) // (85) 9.9623-0391
+            length = 16) // (85) 9 9623-0391
     private String telefone;
 
     @Column(name = "email_funcionario",
@@ -87,11 +88,11 @@ public class Funcionario implements UserDetails {
 
     @Column(name = "login_funcionario",
             unique = true,
-            length = 45)
+            length = 30)
     private String login;
 
     @Column(name = "senha_funcionario",
-            length = 80)
+            length = 80) //tamanho para bcrypt
     private String senha;
 
     @OneToMany(mappedBy = "funcionario", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
@@ -112,7 +113,12 @@ public class Funcionario implements UserDetails {
         this.nome = funcionarioResquestDTO.nome;
         this.cpf = funcionarioResquestDTO.cpf;
         this.rg = funcionarioResquestDTO.rg;
-        this.data_nascimento = funcionarioResquestDTO.data_nascimento;
+
+        String dataNascimentoStr = funcionarioResquestDTO.data_nascimento;
+        DateTimeFormatter formatoEntrada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        this.data_nascimento = LocalDate.parse(dataNascimentoStr, formatoEntrada);
+
+
         this.endereco = funcionarioResquestDTO.endereco;
         this.cep = funcionarioResquestDTO.cep;
         this.bairro = funcionarioResquestDTO.bairro;
@@ -122,7 +128,10 @@ public class Funcionario implements UserDetails {
         this.email = funcionarioResquestDTO.email;
         this.funcao = funcionarioResquestDTO.funcao;
         this.login = funcionarioResquestDTO.login;
-        this.senha = new BCryptPasswordEncoder().encode(funcionarioResquestDTO.senha);
+
+        if(funcionarioResquestDTO.senha!=null) {
+            this.senha = new BCryptPasswordEncoder().encode(funcionarioResquestDTO.senha);
+        }
     }
 
     public Set<Consulta> getConsultas() {

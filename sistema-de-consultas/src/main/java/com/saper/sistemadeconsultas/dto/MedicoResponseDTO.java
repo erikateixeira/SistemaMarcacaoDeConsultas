@@ -21,6 +21,7 @@ public class MedicoResponseDTO {
     public String especialidade;
     public String sala;
     public String login;
+    public String senha;
     public List<String> diasDisponiveis;
     public LocalTime hora_inicial;
     public LocalTime hora_final;
@@ -45,6 +46,9 @@ public class MedicoResponseDTO {
         this.especialidade = medico.getEspecialidade();
         this.sala = medico.getSala();
         this.login = medico.getLogin();
+
+        this.senha = mascararSenha(medico.getSenha());
+
         this.diasDisponiveis = convertDiasSemana(medico.getDiasDisponiveis());
 
         LocalDateTime hora_inicial = medico.getHora_inicial();
@@ -56,6 +60,14 @@ public class MedicoResponseDTO {
         this.hora_final= hora_final_sozinha;
 
         this.valor_consulta = medico.getValor_consulta();
+    }
+
+    public String mascararSenha(String senha) {
+        int tamanhoSenha = senha.length();
+
+        String senhaMascarada = senha.replaceAll(".", "*");
+
+        return senhaMascarada;
     }
 
 }

@@ -15,6 +15,11 @@ public class ProntuarioResponseDTO {
     public ProntuarioResponseDTO(Prontuario prontuario){
         this.id_prontuario = prontuario.getId();
         this.id_consulta = prontuario.getConsulta().getId();
+
+        /*byte[] pdfBytes = prontuario.getPdf();
+        MultipartFile multipartFile = new MockMultipartFile("filename.pdf", pdfBytes);
+        this.pdf = multipartFile;*/
+
         this.pdf = prontuario.getPdf();
     }
 

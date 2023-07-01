@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
 @Entity
@@ -88,7 +89,8 @@ public class Paciente {
             length = 40)
     private String plano_saude;
 
-    private Long num_plano;
+    @Column(length = 30)
+    private String num_plano;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate validade_plano;
@@ -103,7 +105,11 @@ public class Paciente {
         this.nome = pacienteRequestDTO.nome;
         this.cpf = pacienteRequestDTO.cpf;
         this.passaporte = pacienteRequestDTO.passaporte;
-        this.data_nascimento = pacienteRequestDTO.data_nascimento;
+
+        String dataNascimentoStr = pacienteRequestDTO.data_nascimento;
+        DateTimeFormatter formatoEntrada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        this.data_nascimento = LocalDate.parse(dataNascimentoStr, formatoEntrada);
+
         this.nome_responsavel = pacienteRequestDTO.nome_responsavel;
         this.cpf_responsavel = pacienteRequestDTO.cpf_responsavel;
         this.genero = pacienteRequestDTO.genero;
@@ -116,7 +122,9 @@ public class Paciente {
         this.email = pacienteRequestDTO.email;
         this.plano_saude = pacienteRequestDTO.plano_saude;
         this.num_plano = pacienteRequestDTO.num_plano;
-        this.validade_plano = pacienteRequestDTO.validade_plano;
+
+        String dataValidadeStr = pacienteRequestDTO.validade_plano;
+        this.validade_plano = LocalDate.parse(dataValidadeStr, formatoEntrada);
     }
 
     public Set<Consulta> getConsultas() {
@@ -127,7 +135,7 @@ public class Paciente {
         this.consultas = consultas;
     }
 
-    public Paciente(Long id, String nome, String cpf, String passaporte, LocalDate data_nascimento, String nome_responsavel, String cpf_responsavel, String genero, String endereco, String cep, String bairro, String cidade, String estado, String telefone, String email, String plano_saude, Long num_plano, LocalDate validade_plano) {
+    public Paciente(Long id, String nome, String cpf, String passaporte, LocalDate data_nascimento, String nome_responsavel, String cpf_responsavel, String genero, String endereco, String cep, String bairro, String cidade, String estado, String telefone, String email, String plano_saude, String num_plano, LocalDate validade_plano) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
@@ -276,11 +284,11 @@ public class Paciente {
         this.plano_saude = plano_saude;
     }
 
-    public Long getNum_plano() {
+    public String getNum_plano() {
         return num_plano;
     }
 
-    public void setNum_plano(Long num_plano) {
+    public void setNum_plano(String num_plano) {
         this.num_plano = num_plano;
     }
 

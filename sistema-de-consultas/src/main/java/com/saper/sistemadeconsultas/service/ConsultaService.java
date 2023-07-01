@@ -1,6 +1,7 @@
 package com.saper.sistemadeconsultas.service;
 
 import com.saper.sistemadeconsultas.dto.*;
+import com.saper.sistemadeconsultas.enums.DiaSemana;
 import com.saper.sistemadeconsultas.model.Consulta;
 import com.saper.sistemadeconsultas.model.Funcionario;
 import com.saper.sistemadeconsultas.model.Medico;
@@ -67,10 +68,10 @@ public class ConsultaService {
         }
 
         else {
-            List<ConsultaResponseMedicoDTO> consultaResponseList = consultaList.stream()
+            List<ConsultaResponseMedicoDTO> consultaResponseMedicoDTOList = consultaList.stream()
                     .map(consulta -> new ConsultaResponseMedicoDTO(consulta))
                     .collect(Collectors.toList());
-            return ResponseEntity.status(HttpStatus.OK).body(consultaResponseList);
+            return ResponseEntity.status(HttpStatus.OK).body(consultaResponseMedicoDTOList);
         }
     }
 
@@ -128,12 +129,23 @@ public class ConsultaService {
         }
 
         else {
-            List<ConsultaResponseDTO> consultaResponseList = consultaList.stream()
-                    .map(consulta -> new ConsultaResponseDTO(consulta))
+            List<ConsultaResponsePacienteDTO> consultaResponsePacienteDTOList = consultaList.stream()
+                    .map(consulta -> new ConsultaResponsePacienteDTO(consulta))
                     .collect(Collectors.toList());
-            return ResponseEntity.status(HttpStatus.OK).body(consultaResponseList);
+            return ResponseEntity.status(HttpStatus.OK).body(consultaResponsePacienteDTOList);
         }
     }
+
+    /*public Object criarCalendario(Medico medico) {
+        Optional<Medico> medicoOptional = medicoRepository.findByNomeContainingIgnoreCase(medico.getNome());
+
+
+        DiaSemana[] diasSemana = medicoRequestDTO.getDiasDisponiveis();
+
+        List<LocalDate> datasValidas = gerarDatas
+
+        return Object...
+    }*/
 
 
 
@@ -161,6 +173,8 @@ public class ConsultaService {
 
 
         Consulta consulta = new Consulta();
+        consulta.setMedico(medicoOptional.get());
+
         consulta.setData(consultaRequestDTO.data_consulta);
 
         LocalDate data_consulta = consultaRequestDTO.getData_consulta();
@@ -169,7 +183,7 @@ public class ConsultaService {
         consulta.setHora_consulta(hora_consulta);
 
         consulta.setRetorno_consulta(consultaRequestDTO.retorno_consulta);
-        consulta.setMedico(medicoOptional.get());
+
         consulta.setFuncionario(funcionarioOptional.get());
         consulta.setPaciente(pacienteOptional.get());
 

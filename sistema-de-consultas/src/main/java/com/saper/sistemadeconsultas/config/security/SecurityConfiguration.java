@@ -16,17 +16,20 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.httpBasic(Customizer.withDefaults());
         http.authorizeHttpRequests( (authz)->authz
+                .requestMatchers(HttpMethod.GET, "/funcionario/nome").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/funcionario/dados").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/funcionario/username").hasAnyRole("ADMIN","RECEPCIONISTA")
                 .requestMatchers(HttpMethod.POST, "/funcionario").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/funcionario").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/funcionario").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/medico/nome").hasAnyRole("ADMIN", "RECEPCIONISTA")
                 .requestMatchers(HttpMethod.GET, "/medico/dados").hasAnyRole("ADMIN", "RECEPCIONISTA")
                 .requestMatchers(HttpMethod.GET, "/medico/username").hasRole("MEDICO")
                 .requestMatchers(HttpMethod.POST, "/medico").hasAnyRole("ADMIN", "RECEPCIONISTA")
                 .requestMatchers(HttpMethod.PUT, "/medico").hasAnyRole("ADMIN", "RECEPCIONISTA")
                 .requestMatchers(HttpMethod.DELETE, "/medico").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/paciente").hasAnyRole("ADMIN", "RECEPCIONISTA")
+                .requestMatchers(HttpMethod.GET, "/paciente/nome").hasAnyRole("ADMIN", "RECEPCIONISTA")
+                .requestMatchers(HttpMethod.GET, "/paciente/dados").hasAnyRole("ADMIN", "RECEPCIONISTA")
                 .requestMatchers(HttpMethod.POST, "/paciente").hasAnyRole("ADMIN", "RECEPCIONISTA")
                 .requestMatchers(HttpMethod.PUT, "/paciente").hasAnyRole("ADMIN", "RECEPCIONISTA")
                 .requestMatchers(HttpMethod.DELETE, "/paciente").hasRole("ADMIN")

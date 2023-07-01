@@ -2,6 +2,7 @@ package com.saper.sistemadeconsultas.service;
 
 import com.saper.sistemadeconsultas.dto.PacienteRequestDTO;
 import com.saper.sistemadeconsultas.dto.PacienteResponseDTO;
+import com.saper.sistemadeconsultas.dto.PacienteResponseNomeDTO;
 import com.saper.sistemadeconsultas.model.Consulta;
 import com.saper.sistemadeconsultas.model.Medico;
 import com.saper.sistemadeconsultas.model.Paciente;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -25,6 +28,17 @@ public class PacienteService {
 
     @Autowired
     ConsultaRepository consultaRepository;
+
+    public ResponseEntity<Object> getOnlyNome(String nome){
+        List<Paciente> pacienteList = pacienteRepository.findAllByNomeContainingIgnoreCase(nome);
+
+        if(pacienteList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Paciente não encontrado.");
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body(pacienteRepository.findAllByNomeContainingIgnoreCase(nome).stream().map(paciente -> new PacienteResponseNomeDTO(paciente)));
+        }
+    }
 
     public ResponseEntity<Object> getAllByNome(String nome){
         List<Paciente> pacienteList = pacienteRepository.findAllByNomeContainingIgnoreCase(nome);
@@ -65,7 +79,9 @@ public class PacienteService {
                 paciente.setPassaporte(pacienteRequestDTO.passaporte);
             }
             if(pacienteRequestDTO.data_nascimento!=null){
-                paciente.setData_nascimento(pacienteRequestDTO.data_nascimento);
+                String dataNascimentoStr = pacienteRequestDTO.data_nascimento;
+                DateTimeFormatter formatoEntrada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                paciente.setData_nascimento(LocalDate.parse(dataNascimentoStr, formatoEntrada));
             }
             if(pacienteRequestDTO.nome_responsavel!=null){
                 paciente.setNome_responsavel(pacienteRequestDTO.nome_responsavel);
@@ -104,7 +120,9 @@ public class PacienteService {
                 paciente.setNum_plano(pacienteRequestDTO.num_plano);
             }
             if(pacienteRequestDTO.validade_plano!=null){
-                paciente.setValidade_plano(pacienteRequestDTO.validade_plano);
+                String dataValidadeStr = pacienteRequestDTO.validade_plano;
+                DateTimeFormatter formatoEntrada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                paciente.setValidade_plano(LocalDate.parse(dataValidadeStr, formatoEntrada));
             }
 
             return ResponseEntity.status(HttpStatus.OK).body(new PacienteResponseDTO(pacienteRepository.save(paciente)));

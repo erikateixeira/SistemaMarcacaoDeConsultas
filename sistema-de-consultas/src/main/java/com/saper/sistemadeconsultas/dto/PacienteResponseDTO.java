@@ -4,6 +4,7 @@ import com.saper.sistemadeconsultas.model.Paciente;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 
 public class PacienteResponseDTO {
@@ -12,7 +13,7 @@ public class PacienteResponseDTO {
     public String nome;
     public String cpf;
     public String passaporte;
-    public LocalDate data_nascimento;
+    public String data_nascimento;
     public String nome_responsavel;
     public String cpf_responsavel;
     public String genero;
@@ -24,15 +25,19 @@ public class PacienteResponseDTO {
     public String telefone;
     public String email;
     public String plano_saude;
-    public Long num_plano;
-    public LocalDate validade_plano;
+    public String num_plano;
+    public String validade_plano;
 
     public PacienteResponseDTO(Paciente paciente){
         this.id = paciente.getId();
         this.nome = paciente.getNome();
         this.cpf = paciente.getCpf();
         this.passaporte = paciente.getPassaporte();
-        this.data_nascimento = paciente.getData_nascimento();
+
+        LocalDate dataNascimento = paciente.getData_nascimento();
+        DateTimeFormatter formatoSaida = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        this.data_nascimento = dataNascimento.format(formatoSaida);
+
         this.nome_responsavel = paciente.getNome_responsavel();
         this.cpf_responsavel = paciente.getCpf_responsavel();
         this.genero = paciente.getGenero();
@@ -45,7 +50,9 @@ public class PacienteResponseDTO {
         this.email = paciente.getEmail();
         this.plano_saude = paciente.getPlano_saude();
         this.num_plano = paciente.getNum_plano();
-        this.validade_plano = paciente.getValidade_plano();
+
+        LocalDate dataValidade = paciente.getValidade_plano();
+        this.validade_plano = dataValidade.format(formatoSaida);
     }
 
 

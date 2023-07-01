@@ -1,6 +1,7 @@
 package com.saper.sistemadeconsultas.service;
 
 import com.saper.sistemadeconsultas.dto.FuncionarioResponseDTO;
+import com.saper.sistemadeconsultas.dto.FuncionarioResponseNomeDTO;
 import com.saper.sistemadeconsultas.dto.FuncionarioResquestDTO;
 import com.saper.sistemadeconsultas.enums.RoleNames;
 import com.saper.sistemadeconsultas.model.*;
@@ -16,10 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +40,17 @@ public class FuncionarioService {
 
     @Autowired
     RoleRepository roleRepository;
+
+    public ResponseEntity<Object> getOnlyNome(String nome){
+        List<Funcionario> funcionarioList = funcionarioRepository.findAllByNomeContainingIgnoreCase(nome);
+
+        if(funcionarioList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Funcionário não encontrado.");
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body(funcionarioRepository.findAllByNomeContainingIgnoreCase(nome).stream().map(funcionario -> new FuncionarioResponseNomeDTO(funcionario)));
+        }
+    }
 
 
     public ResponseEntity<Object> getAllByNome(String nome){
@@ -88,7 +103,9 @@ public class FuncionarioService {
                 funcionario.setRg(funcionarioResquestDTO.rg);
             }
             if(funcionarioResquestDTO.data_nascimento!=null){
-                funcionario.setData_nascimento(funcionarioResquestDTO.data_nascimento);
+                String dataNascimentoStr = funcionarioResquestDTO.data_nascimento;
+                DateTimeFormatter formatoEntrada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                funcionario.setData_nascimento(LocalDate.parse(dataNascimentoStr, formatoEntrada));
             }
             if(funcionarioResquestDTO.endereco!=null){
                 funcionario.setEndereco(funcionarioResquestDTO.endereco);
@@ -130,7 +147,7 @@ public class FuncionarioService {
                 funcionario.setLogin(funcionarioResquestDTO.login);
             }
             if(funcionarioResquestDTO.senha!=null){
-                funcionario.setSenha(funcionarioResquestDTO.senha);
+                funcionario.setSenha(new BCryptPasswordEncoder().encode(funcionarioResquestDTO.senha));
             }
 
             return ResponseEntity.status(HttpStatus.OK).body(new FuncionarioResponseDTO(funcionarioRepository.save(funcionario)));
@@ -183,6 +200,7 @@ public class FuncionarioService {
         setRole.add(optionalRole.get());
         funcionario.setRoles(setRole);
     }
+
 
 
 }

@@ -23,7 +23,7 @@ public class ConsultaResponseAtendimentoDTO {
     public boolean retorno_consulta;
     public String nome_paciente;
     public String plano_saude;
-    public Long num_plano;
+    public String num_plano;
     public LocalDate validade_plano;
     public Long valor_consulta;
     public String nome_funcionario;
@@ -62,7 +62,7 @@ public class ConsultaResponseAtendimentoDTO {
         } else {
             this.nome_paciente = "null";
             this.plano_saude = "null";
-            this.num_plano = null;
+            this.num_plano = "null";
             this.validade_plano = null;
         }
 

@@ -9,9 +9,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -65,12 +67,12 @@ public class Medico implements UserDetails {
     @Column(name = "login_medico",
             nullable = false,
             unique = true,
-            length = 45)
+            length = 30)
     private String login;
 
     @Column(name = "senha_medico",
             nullable = false,
-            length = 60)
+            length = 80)
     private String senha;
 
     @Column(nullable = false)
@@ -120,8 +122,6 @@ public class Medico implements UserDetails {
         return diasSemanaEnum;
     }
 
-
-
     public Medico() {
     }
 
@@ -135,17 +135,24 @@ public class Medico implements UserDetails {
         this.especialidade = medicoRequestDTO.especialidade;
         this.sala = medicoRequestDTO.sala;
         this.login = medicoRequestDTO.login;
-        this.senha = new BCryptPasswordEncoder().encode(medicoRequestDTO.senha);
+
+        if(medicoRequestDTO.senha!=null) {
+            this.senha = new BCryptPasswordEncoder().encode(medicoRequestDTO.senha);
+        }
+
         this.diasDisponiveis = convertDiasDisponiveis(medicoRequestDTO.diasDisponiveis);
 
 
         LocalDate data_cadastro = LocalDate.now();
 
-        LocalTime hora_inicial_isolada = medicoRequestDTO.getHora_inicial();
+        String hora_inicial_string = medicoRequestDTO.getHora_inicial();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss").withLocale(new Locale("pt", "BR"));
+        LocalTime hora_inicial_isolada = LocalTime.parse(hora_inicial_string);
         LocalDateTime hora_inicial = LocalDateTime.of(data_cadastro, hora_inicial_isolada);
         this.hora_inicial = hora_inicial;
 
-        LocalTime hora_final_isolada = medicoRequestDTO.getHora_final();
+        String hora_final_string = medicoRequestDTO.getHora_final();
+        LocalTime hora_final_isolada = LocalTime.parse(hora_final_string);
         LocalDateTime hora_final = LocalDateTime.of(data_cadastro, hora_final_isolada);
         this.hora_final = hora_final;
 
@@ -159,6 +166,45 @@ public class Medico implements UserDetails {
     public void setConsultas(Set<Consulta> consultas) {
         this.consultas = consultas;
     }
+
+    /*public List<LocalDate> gerarDatasValidas(List<DiaSemana> diasDisponiveis) {
+        List<LocalDate> datasValidas = new ArrayList<>();
+        LocalDate dataAtual = LocalDate.now();
+        LocalDate dataFim = dataAtual.plusMonths(3);
+
+        while (!dataAtual.isAfter(dataFim)) {
+            for (DiaSemana diaSemana : diasDisponiveis) {
+                if (dataAtual.getDayOfWeek() == diaSemanaToDayOfWeek(diaSemana)) {
+                    datasValidas.add(dataAtual);
+                    break;
+                }
+            }
+            dataAtual = dataAtual.plusDays(1);
+        }
+
+        return datasValidas;
+    }
+
+    public DayOfWeek diaSemanaToDayOfWeek(DiaSemana diaSemana) {
+        switch (diaSemana) {
+            case SEGUNDA:
+                return DayOfWeek.MONDAY;
+            case TERCA:
+                return DayOfWeek.TUESDAY;
+            case QUARTA:
+                return DayOfWeek.WEDNESDAY;
+            case QUINTA:
+                return DayOfWeek.THURSDAY;
+            case SEXTA:
+                return DayOfWeek.FRIDAY;
+            case SABADO:
+                return DayOfWeek.SATURDAY;
+            case DOMINGO:
+                return DayOfWeek.SUNDAY;
+            default:
+                throw new IllegalArgumentException("Dia da semana inválido: " + diaSemana);
+        }
+    }*/
 
 
     public Medico(Long id, String nome, String cnpj, String crm_estado, String crm_num, String telefone, String email, String especialidade, String sala, String login, String senha, LocalDateTime hora_inicial, LocalDateTime hora_final, Long valor_consulta) {
