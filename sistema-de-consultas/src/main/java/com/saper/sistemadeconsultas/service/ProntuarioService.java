@@ -64,8 +64,15 @@ public class ProntuarioService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Consulta não encontrada.");
         }
 
+        String nome_arquivo;
+        String extensao;
+        Long tamanho;
         byte[] pdfBytes;
+
         try {
+            nome_arquivo = file.getOriginalFilename();
+            extensao = nome_arquivo.substring(nome_arquivo.lastIndexOf("."));
+            tamanho = file.getSize();
             pdfBytes = file.getBytes();
         } catch (IOException e) {
             throw new FileProcessingException("Erro ao processar o arquivo PDF");
@@ -73,12 +80,15 @@ public class ProntuarioService {
 
         Prontuario prontuario = new Prontuario();
 
-        prontuario.setConsulta(consultaOptional.get());
+        prontuario.setNome(nome_arquivo);
+        prontuario.setExtensao(extensao);
+        prontuario.setTamanho(tamanho);
         prontuario.setPdf(pdfBytes);
+        prontuario.setConsulta(consultaOptional.get());
 
         prontuarioRepository.save(prontuario);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ProntuarioResponseDTO(prontuario));
+        return ResponseEntity.status(HttpStatus.CREATED).body(prontuario);
 
     }
 

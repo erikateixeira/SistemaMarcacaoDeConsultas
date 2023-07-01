@@ -47,7 +47,9 @@ public class MedicoResponseDTO {
         this.sala = medico.getSala();
         this.login = medico.getLogin();
 
-        this.senha = mascararSenha(medico.getSenha());
+        if(medico.getSenha()!=null) {
+            this.senha = mascararSenha(medico.getSenha());
+        }
 
         this.diasDisponiveis = convertDiasSemana(medico.getDiasDisponiveis());
 

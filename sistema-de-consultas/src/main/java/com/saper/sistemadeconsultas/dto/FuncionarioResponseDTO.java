@@ -43,7 +43,10 @@ public class FuncionarioResponseDTO {
         this.email = funcionario.getEmail();
         this.funcao = funcionario.getFuncao();
         this.login = funcionario.getLogin();
-        this.senha = mascararSenha(funcionario.getSenha());
+
+        if(funcionario.getSenha()!=null) {
+            this.senha = mascararSenha(funcionario.getSenha());
+        }
     }
 
     public String mascararSenha(String senha) {
