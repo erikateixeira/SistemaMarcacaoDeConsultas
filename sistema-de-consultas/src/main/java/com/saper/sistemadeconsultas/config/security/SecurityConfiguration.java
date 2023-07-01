@@ -14,11 +14,12 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        /* */
         http.httpBasic(Customizer.withDefaults());
-        http.authorizeHttpRequests( (authz)->authz
+        http.authorizeHttpRequests((authz) -> authz
                 .requestMatchers(HttpMethod.GET, "/funcionario/nome").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/funcionario/dados").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/funcionario/username").hasAnyRole("ADMIN","RECEPCIONISTA")
+                .requestMatchers(HttpMethod.GET, "/funcionario/username").hasAnyRole("ADMIN", "RECEPCIONISTA")
                 .requestMatchers(HttpMethod.POST, "/funcionario").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/funcionario").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/funcionario").hasRole("ADMIN")
@@ -42,8 +43,8 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.PUT, "/consulta").hasAnyRole("ADMIN", "RECEPCIONISTA")
                 .requestMatchers(HttpMethod.DELETE, "/consulta").hasAnyRole("ADMIN", "RECEPCIONISTA")
                 .requestMatchers("/prontuario/**").hasRole("MEDICO")
-                .requestMatchers(HttpMethod.GET,"/my/funcionario").hasAnyRole("ADMIN", "RECEPCIONISTA")
-                .requestMatchers(HttpMethod.GET,"/my/medico").hasRole("MEDICO")
+                .requestMatchers(HttpMethod.GET, "/my/funcionario").hasAnyRole("ADMIN", "RECEPCIONISTA")
+                .requestMatchers(HttpMethod.GET, "/my/medico").hasRole("MEDICO")
                 .anyRequest().hasRole("ADMIN"));
         http.csrf((csrf) -> csrf.disable());
 
@@ -55,8 +56,5 @@ public class SecurityConfiguration {
 
         return new BCryptPasswordEncoder();
     }
-
-
-
 
 }
