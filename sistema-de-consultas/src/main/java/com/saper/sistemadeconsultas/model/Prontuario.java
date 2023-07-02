@@ -13,15 +13,8 @@ public class Prontuario {
     @Column(name = "nome_arquivo")
     private String nome;
 
-    @Column(name = "extensão_arquivo")
-    private String extensao;
-
-    @Column(name = "tamanho_arquivo")
-    private Long tamanho;
-
-    @Lob
-    @Column(name = "arquivo_prontuario")
-    private byte[] pdf;
+    @Column(name = "caminho_arquivo")
+    private String caminho;
 
     @OneToOne
     @JoinColumn(name = "id_consulta")
@@ -30,12 +23,10 @@ public class Prontuario {
     public Prontuario() {
     }
 
-    public Prontuario(Long id, String nome, String extensao, Long tamanho, byte[] pdf, Consulta consulta) {
+    public Prontuario(Long id, String nome, String caminho, Consulta consulta) {
         this.id = id;
         this.nome = nome;
-        this.extensao = extensao;
-        this.tamanho = tamanho;
-        this.pdf = pdf;
+        this.caminho = caminho;
         this.consulta = consulta;
     }
 
@@ -55,28 +46,12 @@ public class Prontuario {
         this.nome = nome;
     }
 
-    public String getExtensao() {
-        return extensao;
+    public String getCaminho() {
+        return caminho;
     }
 
-    public void setExtensao(String extensao) {
-        this.extensao = extensao;
-    }
-
-    public Long getTamanho() {
-        return tamanho;
-    }
-
-    public void setTamanho(Long tamanho) {
-        this.tamanho = tamanho;
-    }
-
-    public byte[] getPdf() {
-        return pdf;
-    }
-
-    public void setPdf(byte[] pdf) {
-        this.pdf = pdf;
+    public void setCaminho(String caminho) {
+        this.caminho = caminho;
     }
 
     public Consulta getConsulta() {

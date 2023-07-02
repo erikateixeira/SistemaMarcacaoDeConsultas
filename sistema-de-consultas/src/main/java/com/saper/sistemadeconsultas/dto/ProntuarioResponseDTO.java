@@ -6,21 +6,31 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+
 public class ProntuarioResponseDTO {
 
-    public Long id_consulta;
     public Long id_prontuario;
-    public byte[] pdf;
+    public Long id_consulta;
+    public String data_consulta;
+    public String nome_medico;
+
 
     public ProntuarioResponseDTO(Prontuario prontuario){
         this.id_prontuario = prontuario.getId();
         this.id_consulta = prontuario.getConsulta().getId();
 
-        /*byte[] pdfBytes = prontuario.getPdf();
-        MultipartFile multipartFile = new MockMultipartFile("filename.pdf", pdfBytes);
-        this.pdf = multipartFile;*/
+        LocalDate dataConsulta = prontuario.getConsulta().getData();
+        DateTimeFormatter formatoSaida = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        this.data_consulta = dataConsulta.format(formatoSaida);
 
-        this.pdf = prontuario.getPdf();
+        this.nome_medico = prontuario.getConsulta().getMedico().getNome();
     }
 
 }
