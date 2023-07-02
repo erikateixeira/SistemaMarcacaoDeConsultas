@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/paciente")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PacienteController {
 
     @Autowired

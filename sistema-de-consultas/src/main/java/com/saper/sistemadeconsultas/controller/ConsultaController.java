@@ -12,6 +12,7 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/consulta")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ConsultaController {
 
     @Autowired

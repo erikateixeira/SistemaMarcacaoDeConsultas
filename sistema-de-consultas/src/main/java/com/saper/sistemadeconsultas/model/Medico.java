@@ -2,6 +2,8 @@ package com.saper.sistemadeconsultas.model;
 
 import com.saper.sistemadeconsultas.dto.MedicoRequestDTO;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.format.annotation.DateTimeFormat;
 import com.saper.sistemadeconsultas.enums.DiaSemana;
 import org.springframework.security.core.GrantedAuthority;
@@ -90,6 +92,7 @@ public class Medico implements UserDetails {
     Set<Consulta> consultas;
 
     @ElementCollection(targetClass = DiaSemana.class)
+    @Fetch(FetchMode.JOIN)
     @CollectionTable(name = "medico_dia_semana",
             joinColumns = @JoinColumn(name = "id_medico", referencedColumnName = "id_medico"))
     @Column(name = "dia_semana")

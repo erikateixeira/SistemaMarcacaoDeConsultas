@@ -10,6 +10,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/prontuario")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ProntuarioController {
 
     @Autowired
