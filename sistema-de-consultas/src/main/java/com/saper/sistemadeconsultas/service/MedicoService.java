@@ -70,8 +70,8 @@ public class MedicoService {
     }
 
     @Transactional
-    public ResponseEntity<Object> update(String nome, MedicoRequestDTO medicoRequestDTO) {
-        Optional<Medico> medicoOptional = medicoRepository.findByNomeContainingIgnoreCase(nome);
+    public ResponseEntity<Object> update(Long id_medico, MedicoRequestDTO medicoRequestDTO) {
+        Optional<Medico> medicoOptional = medicoRepository.findById(id_medico);
 
         if(medicoOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Médico não encontrado.");
@@ -139,8 +139,8 @@ public class MedicoService {
     }
 
     @Transactional
-    public ResponseEntity<Object> delete(String nome) {
-        Optional<Medico> medicoOptional = medicoRepository.findByNomeContainingIgnoreCase(nome);
+    public ResponseEntity<Object> delete(Long id_medico) {
+        Optional<Medico> medicoOptional = medicoRepository.findById(id_medico);
 
         if (medicoOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Médico não encontrado.");

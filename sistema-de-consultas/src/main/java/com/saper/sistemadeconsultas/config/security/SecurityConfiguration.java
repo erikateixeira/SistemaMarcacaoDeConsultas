@@ -50,13 +50,9 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.PUT, "/consulta").hasAnyRole("ADMIN", "RECEPCIONISTA")
                 .requestMatchers(HttpMethod.DELETE, "/consulta").hasAnyRole("ADMIN", "RECEPCIONISTA")
                 .requestMatchers("/prontuario/**").hasRole("MEDICO")
-                .requestMatchers(HttpMethod.GET, "/my/funcionario").hasAnyRole("ADMIN", "RECEPCIONISTA")
-                .requestMatchers(HttpMethod.GET, "/my/medico").hasRole("MEDICO")
-                .anyRequest().hasRole("ADMIN"))
-                .csrf((csrf) -> csrf.disable())
-                .csrf().disable()
-                .csrf().disable()
-                .headers().frameOptions().disable();
+                .requestMatchers(HttpMethod.GET, "/my/usuario").hasAnyRole("ADMIN", "RECEPCIONISTA", "MEDICO")
+                .anyRequest().hasRole("ADMIN"));
+        http.csrf((csrf) -> csrf.disable());
 
         return http.build();
     }

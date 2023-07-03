@@ -1,6 +1,7 @@
 package com.saper.sistemadeconsultas.service;
 
 import ch.qos.logback.core.net.server.Client;
+import com.saper.sistemadeconsultas.config.FileStorageConfig;
 import com.saper.sistemadeconsultas.dto.*;
 import com.saper.sistemadeconsultas.exception.exceptions.FileProcessingException;
 import com.saper.sistemadeconsultas.model.Consulta;
@@ -11,13 +12,19 @@ import com.saper.sistemadeconsultas.repository.ConsultaRepository;
 import com.saper.sistemadeconsultas.repository.PacienteRepository;
 import com.saper.sistemadeconsultas.repository.ProntuarioRepository;
 import jakarta.transaction.Transactional;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.FileNameMap;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +41,10 @@ public class ProntuarioService {
 
     @Autowired
     PacienteRepository pacienteRepository;
+
+    @Autowired
+    FileStorageConfig fileStorageConfig;
+
 
     public ResponseEntity<Object> getAllProntuarioByNome(String nome) {
         Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContainingIgnoreCase(nome);
@@ -53,8 +64,36 @@ public class ProntuarioService {
                     .collect(Collectors.toList());
             return ResponseEntity.status(HttpStatus.OK).body(prontuarioResponseDTOList);
         }
-
     }
+
+
+    public ResponseEntity<byte[]> getProntuarioPDF(Long id_prontuario) throws IOException {
+        Optional<Prontuario> prontuarioOptional = prontuarioRepository.findById(id_prontuario);
+
+        if (prontuarioOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        Prontuario prontuario = prontuarioOptional.get();
+        String caminho_arquivo = fileStorageConfig.getUploadPath().resolve(prontuario.getNome()).toString();
+
+        File file = new File(caminho_arquivo);
+
+        if (!file.exists()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        FileInputStream fileInputStream = new FileInputStream(file);
+        byte[] pdfBytes = IOUtils.toByteArray(fileInputStream);
+        fileInputStream.close();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.builder("inline").filename(prontuario.getNome()).build());
+
+        return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+    }
+
 
     @Transactional
     public ResponseEntity<Object> save(Long id_consulta, MultipartFile file) {
@@ -65,15 +104,14 @@ public class ProntuarioService {
         }
 
         String nome_arquivo;
-        String extensao;
-        Long tamanho;
-        byte[] pdfBytes;
+        Path caminho_arquivo;
 
         try {
             nome_arquivo = file.getOriginalFilename();
-            extensao = nome_arquivo.substring(nome_arquivo.lastIndexOf("."));
-            tamanho = file.getSize();
-            pdfBytes = file.getBytes();
+            caminho_arquivo = fileStorageConfig.getUploadPath().resolve(nome_arquivo);
+
+            Files.copy(file.getInputStream(), caminho_arquivo, StandardCopyOption.REPLACE_EXISTING);
+
         } catch (IOException e) {
             throw new FileProcessingException("Erro ao processar o arquivo PDF");
         }
@@ -81,14 +119,12 @@ public class ProntuarioService {
         Prontuario prontuario = new Prontuario();
 
         prontuario.setNome(nome_arquivo);
-        prontuario.setExtensao(extensao);
-        prontuario.setTamanho(tamanho);
-        prontuario.setPdf(pdfBytes);
+        prontuario.setCaminho(caminho_arquivo.toString());
         prontuario.setConsulta(consultaOptional.get());
 
         prontuarioRepository.save(prontuario);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(prontuario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ProntuarioResponseDTO(prontuario));
 
     }
 

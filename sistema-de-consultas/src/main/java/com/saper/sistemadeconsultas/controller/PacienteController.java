@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/paciente")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PacienteController {
 
     @Autowired
@@ -29,14 +30,14 @@ public class PacienteController {
     }
 
     @PutMapping
-    public Object update(@RequestParam(name = "nome", defaultValue = "") String nome,
+    public Object update(@RequestParam(name = "id_paciente") Long id_paciente,
                          @Valid @RequestBody PacienteRequestDTO pacienteRequestDTO){
-        return pacienteService.update(nome, pacienteRequestDTO);
+        return pacienteService.update(id_paciente, pacienteRequestDTO);
     }
 
     @DeleteMapping
-    public Object delete(@RequestParam(name = "nome", defaultValue = "") String nome){
-        return pacienteService.delete(nome);
+    public Object delete(@RequestParam(name = "id_paciente") Long id_paciente){
+        return pacienteService.delete(id_paciente);
     }
 
 
