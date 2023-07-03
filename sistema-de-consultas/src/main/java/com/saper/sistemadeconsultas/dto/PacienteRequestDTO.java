@@ -64,18 +64,8 @@ public class PacienteRequestDTO {
     public String email;
 
     @NotBlank
-    @Size(max = 40)
-    /*@Pattern.List({
-            @Pattern(regexp = "(?i)são camilo"),
-            @Pattern(regexp = "(?i)unimed"),
-            @Pattern(regexp = "(?i)bradesco"),
-            @Pattern(regexp = "(?i)camed"),
-            @Pattern(regexp = "(?i)famed"),
-            @Pattern(regexp = "(?i)cassi"),
-            @Pattern(regexp = "(?i)life"),
-            @Pattern(regexp = "(?i)issec"),
-            @Pattern(regexp = "(?i)particular")
-    })*/
+    @Pattern(regexp = "(?i)são camilo|unimed|bradesco|camed|famed|cassi|life|issec|particular",
+            message = "Planos de saúde aceitos são SÃO CAMILO, UNIMED, BRADESCO, CAMED, FAMED, CASSI, LIFE, ISSEC ou PARTICULAR.")
     public String plano_saude;
 
     @Size(max = 30)

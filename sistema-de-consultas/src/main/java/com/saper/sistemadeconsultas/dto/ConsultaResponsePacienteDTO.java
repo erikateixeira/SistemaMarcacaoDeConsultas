@@ -8,12 +8,13 @@ import com.saper.sistemadeconsultas.model.Paciente;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class ConsultaResponsePacienteDTO {
 
     public String nome_paciente;
     public String nome_medico;
-    public LocalDate data_consulta;
+    public String data_consulta;
     public LocalTime hora_consulta;
     public boolean retorno_consulta;
 
@@ -34,17 +35,15 @@ public class ConsultaResponsePacienteDTO {
             this.nome_medico = "null";
         }
 
-        this.data_consulta = consulta.getData();
+        LocalDate dataConsulta = consulta.getData();
+        DateTimeFormatter formatoSaida = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        this.data_consulta = dataConsulta.format(formatoSaida);
 
         LocalDateTime hora_consulta = consulta.getHora_consulta();
         LocalTime hora_consulta_sozinha = hora_consulta.toLocalTime();
         this.hora_consulta = hora_consulta_sozinha;
 
         this.retorno_consulta = consulta.isRetorno_consulta();
-
-
-
-
 
     }
 

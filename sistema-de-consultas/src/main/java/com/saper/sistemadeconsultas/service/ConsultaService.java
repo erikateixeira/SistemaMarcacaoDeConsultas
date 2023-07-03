@@ -19,8 +19,10 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -175,10 +177,14 @@ public class ConsultaService {
         Consulta consulta = new Consulta();
         consulta.setMedico(medicoOptional.get());
 
-        consulta.setData(consultaRequestDTO.data_consulta);
+        String dataConsultaStr = consultaRequestDTO.data_consulta;
+        DateTimeFormatter formatoEntrada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate data_consulta = LocalDate.parse(dataConsultaStr, formatoEntrada);
+        consulta.setData(data_consulta);
 
-        LocalDate data_consulta = consultaRequestDTO.getData_consulta();
-        LocalTime hora_consulta_isolada = consultaRequestDTO.getHora_consulta();
+        String hora_consulta_string = consultaRequestDTO.hora_consulta;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss").withLocale(new Locale("pt", "BR"));
+        LocalTime hora_consulta_isolada = LocalTime.parse(hora_consulta_string);
         LocalDateTime hora_consulta = LocalDateTime.of(data_consulta, hora_consulta_isolada);
         consulta.setHora_consulta(hora_consulta);
 
@@ -226,11 +232,16 @@ public class ConsultaService {
             }
 
             if(consultaRequestDTO.data_consulta!=null){
-                consulta.setData(consultaRequestDTO.data_consulta);
+                String dataConsultaStr = consultaRequestDTO.data_consulta;
+                DateTimeFormatter formatoEntrada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate data_consulta = LocalDate.parse(dataConsultaStr, formatoEntrada);
+                consulta.setData(data_consulta);
             }
             if(consultaRequestDTO.hora_consulta!=null){
-                LocalDate data_consulta = consultaRequestDTO.getData_consulta();
-                LocalTime hora_consulta_isolada = consultaRequestDTO.getHora_consulta();
+                LocalDate data_consulta = consulta.getData();
+                String hora_consulta_string = consultaRequestDTO.hora_consulta;
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss").withLocale(new Locale("pt", "BR"));
+                LocalTime hora_consulta_isolada = LocalTime.parse(hora_consulta_string);
                 LocalDateTime hora_consulta = LocalDateTime.of(data_consulta, hora_consulta_isolada);
                 consulta.setHora_consulta(hora_consulta);
             }

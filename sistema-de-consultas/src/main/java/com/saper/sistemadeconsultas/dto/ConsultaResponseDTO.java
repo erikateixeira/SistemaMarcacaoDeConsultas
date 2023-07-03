@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 public class ConsultaResponseDTO {
 
     public Long id_consulta;
-    public LocalDate data_consulta;
+    public String data_consulta;
     public LocalTime hora_consulta;
     public boolean retorno_consulta;
     public String nome_medico;
@@ -25,7 +25,10 @@ public class ConsultaResponseDTO {
 
     public ConsultaResponseDTO(Consulta consulta){
         this.id_consulta = consulta.getId();
-        this.data_consulta = consulta.getData();
+
+        LocalDate dataConsulta = consulta.getData();
+        DateTimeFormatter formatoSaida = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        this.data_consulta = dataConsulta.format(formatoSaida);
 
         LocalDateTime hora_consulta = consulta.getHora_consulta();
         LocalTime hora_consulta_sozinha = hora_consulta.toLocalTime();

@@ -10,6 +10,7 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 
 public class ConsultaResponseAtendimentoDTO {
@@ -18,13 +19,13 @@ public class ConsultaResponseAtendimentoDTO {
     public String nome_medico;
     public String especialidade;
     public String sala;
-    public LocalDate data_consulta;
+    public String data_consulta;
     public LocalTime hora_consulta;
     public boolean retorno_consulta;
     public String nome_paciente;
     public String plano_saude;
     public String num_plano;
-    public LocalDate validade_plano;
+    public String validade_plano;
     public Long valor_consulta;
     public String nome_funcionario;
 
@@ -45,7 +46,9 @@ public class ConsultaResponseAtendimentoDTO {
             this.valor_consulta = null;
         }
 
-        this.data_consulta = consulta.getData();
+        LocalDate dataConsulta = consulta.getData();
+        DateTimeFormatter formatoSaida = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        this.data_consulta = dataConsulta.format(formatoSaida);
 
         LocalDateTime hora_consulta = consulta.getHora_consulta();
         LocalTime hora_consulta_sozinha = hora_consulta.toLocalTime();
@@ -58,12 +61,15 @@ public class ConsultaResponseAtendimentoDTO {
             this.nome_paciente = consulta.getPaciente().getNome();
             this.plano_saude = consulta.getPaciente().getPlano_saude();
             this.num_plano = consulta.getPaciente().getNum_plano();
-            this.validade_plano = consulta.getPaciente().getValidade_plano();
+
+            LocalDate validadePlano = consulta.getPaciente().getValidade_plano();
+            this.validade_plano = validadePlano.format(formatoSaida);
+
         } else {
             this.nome_paciente = "null";
             this.plano_saude = "null";
             this.num_plano = "null";
-            this.validade_plano = null;
+            this.validade_plano = "null";
         }
 
         Funcionario funcionario = consulta.getFuncionario();

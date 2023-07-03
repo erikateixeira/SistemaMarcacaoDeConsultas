@@ -1,10 +1,7 @@
 package com.saper.sistemadeconsultas.dto;
 
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -56,12 +53,7 @@ public class FuncionarioResquestDTO {
     public String email;
 
     @NotBlank
-    @Size(max = 40)
-    /*@Pattern.List({
-        @Pattern(regexp = "(?i)admin"),
-        @Pattern(regexp = "(?i)recepcionista"),
-        @Pattern(regexp = "(?i)auxiliar")
-    })*/
+    @Pattern(regexp = "(?i)admin|recepcionista|auxiliar", message = "Função deve conter ADMIN, RECEPCIONISTA ou AUXILIAR.")
     public String funcao;
 
     @Size(max = 30)
