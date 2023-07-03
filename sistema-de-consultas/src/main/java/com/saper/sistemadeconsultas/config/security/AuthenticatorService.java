@@ -21,7 +21,6 @@ public class AuthenticatorService implements UserDetailsService {
     @Autowired
     MedicoRepository medicoRepository;
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Funcionario> funcionarioOptional = funcionarioRepository.findByLogin(username);
@@ -35,6 +34,5 @@ public class AuthenticatorService implements UserDetailsService {
             return medicoOptional.get();
         }
     }
-
 
 }

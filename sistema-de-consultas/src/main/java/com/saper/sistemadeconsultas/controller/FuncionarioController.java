@@ -16,44 +16,43 @@ public class FuncionarioController {
     FuncionarioService funcionarioService;
 
     @GetMapping("/nome")
-    public Object getOnlyNome(@RequestParam(name = "nome", defaultValue = "") String nome){
+    public Object getOnlyNome(@RequestParam(name = "nome", defaultValue = "") String nome) {
         return funcionarioService.getOnlyNome(nome);
     }
 
     @GetMapping("/dados")
-    public Object getAllByNome(@RequestParam(name = "nome", defaultValue = "") String nome){
+    // @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @CrossOrigin(origins = "http://localhost:5173")
+    public Object getAllByNome(@RequestParam(name = "nome", defaultValue = "") String nome) {
         return funcionarioService.getAllByNome(nome);
     }
 
     @PostMapping
-    public Object save(@Valid @RequestBody FuncionarioResquestDTO funcionarioResquestDTO){
+    public Object save(@Valid @RequestBody FuncionarioResquestDTO funcionarioResquestDTO) {
         return funcionarioService.save(funcionarioResquestDTO);
     }
 
     @PutMapping
     public Object update(@RequestParam(name = "nome", defaultValue = "") String nome,
-                         @Valid @RequestBody FuncionarioResquestDTO funcionarioResquestDTO){
+            @Valid @RequestBody FuncionarioResquestDTO funcionarioResquestDTO) {
         return funcionarioService.update(nome, funcionarioResquestDTO);
     }
 
     @DeleteMapping
-    public Object delete(@RequestParam(name = "nome", defaultValue = "") String nome){
+    public Object delete(@RequestParam(name = "nome", defaultValue = "") String nome) {
         return funcionarioService.delete(nome);
     }
 
     @GetMapping("/username")
-    public Object getUsername(){
+    public Object getUsername() {
         Object logged = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         String username = "";
 
         if (logged instanceof Funcionario) {
-            username = ((Funcionario)logged).getUsername();
+            username = ((Funcionario) logged).getUsername();
         }
         return username;
     }
-
-
-
 
 }

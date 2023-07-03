@@ -1,15 +1,22 @@
 package com.saper.sistemadeconsultas.config.security;
 
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfiguration {
 
     @Bean
@@ -45,8 +52,11 @@ public class SecurityConfiguration {
                 .requestMatchers("/prontuario/**").hasRole("MEDICO")
                 .requestMatchers(HttpMethod.GET, "/my/funcionario").hasAnyRole("ADMIN", "RECEPCIONISTA")
                 .requestMatchers(HttpMethod.GET, "/my/medico").hasRole("MEDICO")
-                .anyRequest().hasRole("ADMIN"));
-        http.csrf((csrf) -> csrf.disable());
+                .anyRequest().hasRole("ADMIN"))
+                .csrf((csrf) -> csrf.disable())
+                .csrf().disable()
+                .csrf().disable()
+                .headers().frameOptions().disable();
 
         return http.build();
     }
@@ -56,5 +66,4 @@ public class SecurityConfiguration {
 
         return new BCryptPasswordEncoder();
     }
-
 }
