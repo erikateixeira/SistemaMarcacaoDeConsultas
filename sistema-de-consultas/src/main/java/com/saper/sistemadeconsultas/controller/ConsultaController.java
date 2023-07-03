@@ -52,19 +52,14 @@ public class ConsultaController {
     }
 
     @PutMapping
-    public Object update(@RequestParam(name = "nome_paciente", defaultValue = "") String nome_paciente,
-                         @RequestParam(name = "nome_medico", defaultValue = "") String nome_medico,
-                         @RequestParam(name = "data") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate data,
-                         @Valid @RequestBody ConsultaRequestDTO consultaRequestDTO){
-        return consultaService.update(nome_paciente, nome_medico, data, consultaRequestDTO);
+    public Object update(@RequestParam(name = "id_consulta") Long id_consulta,
+                        @Valid @RequestBody ConsultaRequestDTO consultaRequestDTO){
+        return consultaService.update(id_consulta, consultaRequestDTO);
     }
 
     @DeleteMapping
-    public Object delete(@RequestParam(name = "nome_paciente", defaultValue = "") String nome_paciente,
-                         @RequestParam(name = "nome_medico", defaultValue = "") String nome_medico,
-                         @RequestParam(name = "data") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate data){
-
-        return consultaService.delete(nome_paciente, nome_medico, data);
+    public Object delete(@RequestParam(name = "id_consulta") Long id_consulta){
+        return consultaService.delete(id_consulta);
     }
 
 

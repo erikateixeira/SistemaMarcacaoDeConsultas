@@ -194,25 +194,36 @@ public class ConsultaService {
     }
 
     @Transactional
-    public ResponseEntity<Object> update(String nome_paciente, String nome_medico, LocalDate data, ConsultaRequestDTO consultaRequestDTO) {
-        Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContainingIgnoreCase(nome_paciente);
-        Optional<Medico> medicoOptional = medicoRepository.findByNomeContainingIgnoreCase(nome_medico);
-        List<Consulta> consultaList = consultaRepository.findByDataAndMedicoNomeContainingIgnoreCase(data, nome_medico);
+    public ResponseEntity<Object> update(Long id_consulta, ConsultaRequestDTO consultaRequestDTO) {
+        Optional<Consulta> consultaOptional  = consultaRepository.findById(id_consulta);
 
-        if(pacienteOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Paciente não encontrado.");
+        if(consultaOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Consulta não encontrada.");
         }
-
-        if (medicoOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Médico não encontrado.");
-        }
-
-        if (consultaList.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existem consultas dessa data para o médico especificado.");
-        }
-
         else {
-            Consulta consulta = consultaList.get(0);
+            Consulta consulta = consultaOptional.get();
+
+            if(consultaRequestDTO.nome_medico!=null){
+                Optional<Medico> medicoOptional = medicoRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_medico);
+
+                if(medicoOptional.isEmpty()){
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Médico não encontrado.");
+                }
+                else {
+                    consulta.setMedico(medicoOptional.get());
+                }
+            }
+
+            if(consultaRequestDTO.nome_paciente!=null){
+                Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_paciente);
+
+                if(pacienteOptional.isEmpty()){
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Paciente não encontrado.");
+                }
+                else {
+                    consulta.setPaciente(pacienteOptional.get());
+                }
+            }
 
             if(consultaRequestDTO.data_consulta!=null){
                 consulta.setData(consultaRequestDTO.data_consulta);
@@ -239,27 +250,15 @@ public class ConsultaService {
     }
 
     @Transactional
-    public ResponseEntity<Object> delete(String nome_paciente, String nome_medico, LocalDate data) {
-        Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContainingIgnoreCase(nome_paciente);
-        Optional<Medico> medicoOptional = medicoRepository.findByNomeContainingIgnoreCase(nome_medico);
-        List<Consulta> consultaList = consultaRepository.findByDataAndMedicoNomeContainingIgnoreCase(data, nome_medico);
+    public ResponseEntity<Object> delete(Long id_consulta) {
+        Optional<Consulta> consultaOptional  = consultaRepository.findById(id_consulta);
 
-        if (pacienteOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Paciente não encontrado.");
-        }
-
-        if (medicoOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Médico não encontrado.");
-        }
-
-        if (consultaList.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existem consultas dessa data para o médico especificado.");
+        if(consultaOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Consulta não encontrada.");
         }
 
         else {
-
-            Consulta consulta = consultaList.get(0);
-
+            Consulta consulta = consultaOptional.get();
             consultaRepository.delete(consulta);
 
             return ResponseEntity.status(HttpStatus.OK).build();

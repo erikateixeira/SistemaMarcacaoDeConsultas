@@ -33,15 +33,15 @@ public class MedicoController {
     }
 
     @PutMapping
-    public Object update(@RequestParam(name = "nome", defaultValue = "") String nome,
+    public Object update(@RequestParam(name = "id_medico") Long id_medico,
                          @Valid @RequestBody MedicoRequestDTO medicoRequestDTO){
-        return medicoService.update(nome, medicoRequestDTO);
+        return medicoService.update(id_medico, medicoRequestDTO);
     }
 
     @DeleteMapping
-    public Object delete(@RequestParam(name = "nome", defaultValue = "") String nome){
+    public Object delete(@RequestParam(name = "id_medico") Long id_medico){
 
-        return medicoService.delete(nome);
+        return medicoService.delete(id_medico);
     }
 
     @GetMapping("/username")

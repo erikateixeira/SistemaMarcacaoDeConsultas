@@ -51,8 +51,10 @@ public class PacienteResponseDTO {
         this.plano_saude = paciente.getPlano_saude();
         this.num_plano = paciente.getNum_plano();
 
-        LocalDate dataValidade = paciente.getValidade_plano();
-        this.validade_plano = dataValidade.format(formatoSaida);
+        if(paciente.getValidade_plano()!=null) {
+            LocalDate dataValidade = paciente.getValidade_plano();
+            this.validade_plano = dataValidade.format(formatoSaida);
+        }
     }
 
 

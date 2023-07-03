@@ -32,14 +32,14 @@ public class FuncionarioController {
     }
 
     @PutMapping
-    public Object update(@RequestParam(name = "nome", defaultValue = "") String nome,
+    public Object update(@RequestParam(name = "id_funcionario") Long id_funcionario,
                          @Valid @RequestBody FuncionarioResquestDTO funcionarioResquestDTO){
-        return funcionarioService.update(nome, funcionarioResquestDTO);
+        return funcionarioService.update(id_funcionario, funcionarioResquestDTO);
     }
 
     @DeleteMapping
-    public Object delete(@RequestParam(name = "nome", defaultValue = "") String nome){
-        return funcionarioService.delete(nome);
+    public Object delete(@RequestParam(name = "id_funcionario") Long id_funcionario){
+        return funcionarioService.delete(id_funcionario);
     }
 
     @GetMapping("/username")
