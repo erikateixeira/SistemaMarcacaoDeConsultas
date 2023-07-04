@@ -21,7 +21,7 @@ public class ConsultaResponseMedicoDTO {
             this.nome_paciente = "null";
         }
 
-        LocalDateTime hora_consulta = consulta.getHora_consulta();
+        LocalDateTime hora_consulta = consulta.getHora();
         LocalTime hora_consulta_sozinha = hora_consulta.toLocalTime();
         this.hora_consulta = hora_consulta_sozinha;
 

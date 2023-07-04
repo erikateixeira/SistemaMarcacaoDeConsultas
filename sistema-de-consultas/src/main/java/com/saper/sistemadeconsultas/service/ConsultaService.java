@@ -2,6 +2,7 @@ package com.saper.sistemadeconsultas.service;
 
 import com.saper.sistemadeconsultas.dto.*;
 import com.saper.sistemadeconsultas.enums.DiaSemana;
+import com.saper.sistemadeconsultas.exception.exceptions.ConflictStoreException;
 import com.saper.sistemadeconsultas.model.Consulta;
 import com.saper.sistemadeconsultas.model.Funcionario;
 import com.saper.sistemadeconsultas.model.Medico;
@@ -20,10 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,97 +43,67 @@ public class ConsultaService {
         List<Consulta> consultaList = consultaRepository.findByData(data);
 
         if (consultaList.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existem consultas dessa data.");
-        }
-
+            throw new NoSuchElementException("Não existem consultas na data: " + data);}
         else {
             List<ConsultaResponseDTO> consultaResponseList = consultaList.stream()
                     .map(consulta -> new ConsultaResponseDTO(consulta))
                     .collect(Collectors.toList());
-            return ResponseEntity.status(HttpStatus.OK).body(consultaResponseList);
-        }
+            return ResponseEntity.status(HttpStatus.OK).body(consultaResponseList);}
     }
 
 
     public ResponseEntity<Object> getAllConsultasDoMedicoPorDia(String nome, LocalDate data) {
-        Optional<Medico> medicoOptional = medicoRepository.findByNomeContainingIgnoreCase(nome);
+        Medico medico = medicoRepository.findByNomeContainingIgnoreCase(nome).orElseThrow(()-> new NoSuchElementException("Médico não encontrado."));
         List<Consulta> consultaList = consultaRepository.findByDataAndMedicoNomeContainingIgnoreCase(data, nome);
 
-        if (medicoOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Médico não encontrado.");
-        }
-
         if (consultaList.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existem consultas dessa data para o médico especificado.");
-        }
-
+            throw new NoSuchElementException("Não existem consultas na data " + data + " para " + nome);}
         else {
             List<ConsultaResponseMedicoDTO> consultaResponseMedicoDTOList = consultaList.stream()
                     .map(consulta -> new ConsultaResponseMedicoDTO(consulta))
                     .collect(Collectors.toList());
-            return ResponseEntity.status(HttpStatus.OK).body(consultaResponseMedicoDTOList);
-        }
+            return ResponseEntity.status(HttpStatus.OK).body(consultaResponseMedicoDTOList);}
     }
 
     public ResponseEntity<Object> getAllConsultasDoMedicoParaConfirmacao(String nome, LocalDate data) {
-        Optional<Medico> medicoOptional = medicoRepository.findByNomeContainingIgnoreCase(nome);
+        Medico medico = medicoRepository.findByNomeContainingIgnoreCase(nome).orElseThrow(()-> new NoSuchElementException("Médico não encontrado."));
         List<Consulta> consultaList = consultaRepository.findByDataAndMedicoNomeContainingIgnoreCase(data, nome);
 
-        if (medicoOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Médico não encontrado.");
-        }
-
         if (consultaList.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existem consultas dessa data para o médico especificado.");
-        }
-
+            throw new NoSuchElementException("Não existem consultas na data " + data + " para " + nome);}
         else {
             List<ConsultaResponseConfirmacaoDTO> consultaResponseConfirmacaoDTOList = consultaList.stream()
                     .map(consulta -> new ConsultaResponseConfirmacaoDTO(consulta))
                     .collect(Collectors.toList());
-            return ResponseEntity.status(HttpStatus.OK).body(consultaResponseConfirmacaoDTOList);
-        }
+            return ResponseEntity.status(HttpStatus.OK).body(consultaResponseConfirmacaoDTOList);}
     }
 
 
     public ResponseEntity<Object> getConsultaDoPacienteParaAtendimento(String nome, LocalDate data) {
-        Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContainingIgnoreCase(nome);
+        Paciente paciente = pacienteRepository.findByNomeContainingIgnoreCase(nome).orElseThrow(()-> new NoSuchElementException("Paciente não encontrado."));
         List<Consulta> consultaList = consultaRepository.findByDataAndPacienteNomeContainingIgnoreCase(data, nome);
 
-        if (pacienteOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Paciente não encontrado.");
-        }
-
         if (consultaList.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existem consultas dessa data para o paciente especificado.");
-        }
-
+            throw new NoSuchElementException("Não existem consultas na data " + data + " para " + nome);}
         else {
             List<ConsultaResponseAtendimentoDTO> consultaResponseAtendimentoDTOList = consultaList.stream()
                     .map(consulta -> new ConsultaResponseAtendimentoDTO(consulta))
                     .collect(Collectors.toList());
-            return ResponseEntity.status(HttpStatus.OK).body(consultaResponseAtendimentoDTOList);
-        }
+            return ResponseEntity.status(HttpStatus.OK).body(consultaResponseAtendimentoDTOList);}
     }
 
     public ResponseEntity<Object> getConsultasDoPaciente(String nome) {
-        Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContainingIgnoreCase(nome);
+        Paciente paciente = pacienteRepository.findByNomeContainingIgnoreCase(nome).orElseThrow(()-> new NoSuchElementException("Paciente não encontrado."));
+
         List<Consulta> consultaList = consultaRepository.findByPacienteNomeContainingIgnoreCase(nome);
 
-        if (pacienteOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Paciente não encontrado.");
-        }
-
         if (consultaList.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existem consultas para o paciente especificado.");
-        }
-
+            throw new NoSuchElementException("Não existem consultas para " + nome);}
         else {
             List<ConsultaResponsePacienteDTO> consultaResponsePacienteDTOList = consultaList.stream()
                     .map(consulta -> new ConsultaResponsePacienteDTO(consulta))
                     .collect(Collectors.toList());
-            return ResponseEntity.status(HttpStatus.OK).body(consultaResponsePacienteDTOList);
-        }
+            return ResponseEntity.status(HttpStatus.OK).body(consultaResponsePacienteDTOList);}
     }
 
     /*public Object criarCalendario(Medico medico) {
@@ -153,129 +121,79 @@ public class ConsultaService {
 
     @Transactional
     public ResponseEntity<Object> save(ConsultaRequestDTO consultaRequestDTO){
-
-        Optional<Medico> medicoOptional = medicoRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_medico);
-
-        Optional<Funcionario> funcionarioOptional = funcionarioRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_funcionario);
-
-        Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_paciente);
-
-        if(medicoOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Médico não encontrado.");
-        }
-
-        if(funcionarioOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Funcionário não encontrado.");
-        }
-
-
-        if(pacienteOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Paciente não encontrado.");
-        }
-
+        Medico medico = medicoRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_medico).orElseThrow(()-> new NoSuchElementException("Médico não encontrado."));
+        Funcionario funcionario = funcionarioRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_funcionario).orElseThrow(()-> new NoSuchElementException("Funcionário não encontrado."));
+        Paciente paciente = pacienteRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_paciente).orElseThrow(()-> new NoSuchElementException("Paciente não encontrado."));
 
         Consulta consulta = new Consulta();
-        consulta.setMedico(medicoOptional.get());
 
-        String dataConsultaStr = consultaRequestDTO.data_consulta;
-        DateTimeFormatter formatoEntrada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate data_consulta = LocalDate.parse(dataConsultaStr, formatoEntrada);
+        LocalDate data_consulta = LocalDate.parse(consultaRequestDTO.data_consulta, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         consulta.setData(data_consulta);
 
-        String hora_consulta_string = consultaRequestDTO.hora_consulta;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss").withLocale(new Locale("pt", "BR"));
-        LocalTime hora_consulta_isolada = LocalTime.parse(hora_consulta_string);
+        LocalTime hora_consulta_isolada = LocalTime.parse(consultaRequestDTO.hora_consulta, DateTimeFormatter.ofPattern("HH:mm:ss"));
         LocalDateTime hora_consulta = LocalDateTime.of(data_consulta, hora_consulta_isolada);
-        consulta.setHora_consulta(hora_consulta);
 
+        boolean consulta_existente = consultaRepository.existsByMedicoAndHora(medico, hora_consulta);
+        if (consulta_existente) {
+            throw new ConflictStoreException("Conflito: O médico já possui uma consulta agendada para a mesma data e hora.");
+        }
+
+        consulta.setMedico(medico);
+        consulta.setHora(hora_consulta);
         consulta.setRetorno_consulta(consultaRequestDTO.retorno_consulta);
+        consulta.setFuncionario(funcionario);
+        consulta.setPaciente(paciente);
 
-        consulta.setFuncionario(funcionarioOptional.get());
-        consulta.setPaciente(pacienteOptional.get());
-
-        consultaRepository.save(consulta);
-
+        try {
+            consulta = consultaRepository.save(consulta);}
+        catch (Exception exception){
+            throw new ConflictStoreException("Consulta não pode ser salva devido ao conflito no banco de dados.");}
         return ResponseEntity.status(HttpStatus.CREATED).body(new ConsultaResponseDTO(consulta));
-
     }
 
     @Transactional
     public ResponseEntity<Object> update(Long id_consulta, ConsultaRequestDTO consultaRequestDTO) {
-        Optional<Consulta> consultaOptional  = consultaRepository.findById(id_consulta);
+        Consulta consulta = consultaRepository.findById(id_consulta).orElseThrow(()-> new NoSuchElementException("Consulta não encontrada."));
 
-        if(consultaOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Consulta não encontrada.");
+        consulta.setRetorno_consulta(consulta.isRetorno_consulta()); //não pode ser atualizado
+
+        if(consultaRequestDTO.nome_medico!=null){
+            Medico medico = medicoRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_medico).orElseThrow(()-> new NoSuchElementException("Médico não encontrado."));
+
+            LocalDate nova_data_consulta = consulta.getData();
+            LocalDateTime nova_hora_consulta = consulta.getHora();
+
+            if (consultaRequestDTO.data_consulta != null && consultaRequestDTO.hora_consulta != null) {
+                nova_data_consulta = LocalDate.parse(consultaRequestDTO.data_consulta, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                LocalTime nova_hora_consulta_isolada = LocalTime.parse(consultaRequestDTO.hora_consulta, DateTimeFormatter.ofPattern("HH:mm:ss"));
+                nova_hora_consulta = LocalDateTime.of(nova_data_consulta, nova_hora_consulta_isolada);
+            }
+            boolean consulta_existente = consultaRepository.existsByMedicoAndHora(medico, nova_hora_consulta);
+            if (consulta_existente) {
+                throw new ConflictStoreException("Conflito: O médico já possui uma consulta agendada para a mesma data e hora.");
+            }
+            consulta.setMedico(medico);
+            consulta.setData(nova_data_consulta);
+            consulta.setHora(nova_hora_consulta);
         }
-        else {
-            Consulta consulta = consultaOptional.get();
 
-            if(consultaRequestDTO.nome_medico!=null){
-                Optional<Medico> medicoOptional = medicoRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_medico);
-
-                if(medicoOptional.isEmpty()){
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Médico não encontrado.");
-                }
-                else {
-                    consulta.setMedico(medicoOptional.get());
-                }
-            }
-
-            if(consultaRequestDTO.nome_paciente!=null){
-                Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_paciente);
-
-                if(pacienteOptional.isEmpty()){
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Paciente não encontrado.");
-                }
-                else {
-                    consulta.setPaciente(pacienteOptional.get());
-                }
-            }
-
-            if(consultaRequestDTO.data_consulta!=null){
-                String dataConsultaStr = consultaRequestDTO.data_consulta;
-                DateTimeFormatter formatoEntrada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                LocalDate data_consulta = LocalDate.parse(dataConsultaStr, formatoEntrada);
-                consulta.setData(data_consulta);
-            }
-            if(consultaRequestDTO.hora_consulta!=null){
-                LocalDate data_consulta = consulta.getData();
-                String hora_consulta_string = consultaRequestDTO.hora_consulta;
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss").withLocale(new Locale("pt", "BR"));
-                LocalTime hora_consulta_isolada = LocalTime.parse(hora_consulta_string);
-                LocalDateTime hora_consulta = LocalDateTime.of(data_consulta, hora_consulta_isolada);
-                consulta.setHora_consulta(hora_consulta);
-            }
-            if(consultaRequestDTO.nome_funcionario!=null){
-                Optional<Funcionario> funcionarioOptional = funcionarioRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_funcionario);
-
-                if(funcionarioOptional.isEmpty()){
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Funcionário não encontrado.");
-                }
-                else {
-                    consulta.setFuncionario(funcionarioOptional.get());
-                }
-            }
-
-            return ResponseEntity.status(HttpStatus.OK).body(new ConsultaResponseDTO(consultaRepository.save(consulta)));
+        if(consultaRequestDTO.nome_paciente!=null){
+            Paciente paciente = pacienteRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_paciente).orElseThrow(()-> new NoSuchElementException("Paciente não encontrado."));
+            consulta.setPaciente(paciente);
         }
+        if(consultaRequestDTO.nome_funcionario!=null){
+            Funcionario funcionario = funcionarioRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_funcionario).orElseThrow(()-> new NoSuchElementException("Funcionário não encontrado."));
+            consulta.setFuncionario(funcionario);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(new ConsultaResponseDTO(consultaRepository.save(consulta)));
     }
 
     @Transactional
     public ResponseEntity<Object> delete(Long id_consulta) {
-        Optional<Consulta> consultaOptional  = consultaRepository.findById(id_consulta);
+        Consulta consulta = consultaRepository.findById(id_consulta).orElseThrow(()-> new NoSuchElementException("Consulta não encontrada."));
+        consultaRepository.delete(consulta);
 
-        if(consultaOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Consulta não encontrada.");
-        }
-
-        else {
-            Consulta consulta = consultaOptional.get();
-            consultaRepository.delete(consulta);
-
-            return ResponseEntity.status(HttpStatus.OK).build();
-
-        }
-
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 

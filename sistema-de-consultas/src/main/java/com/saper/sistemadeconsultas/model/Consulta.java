@@ -24,8 +24,8 @@ public class Consulta {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate data;
 
-    @Column(nullable = false)
-    private LocalDateTime hora_consulta;
+    @Column(name = "hora_consulta", nullable = false)
+    private LocalDateTime hora;
 
     @Column(nullable = false)
     private boolean retorno_consulta;
@@ -58,10 +58,10 @@ public class Consulta {
     public Consulta() {
     }
 
-    public Consulta(Long id, LocalDate data, LocalDateTime hora_consulta, boolean retorno_consulta, Medico medico, Funcionario funcionario, Paciente paciente) {
+    public Consulta(Long id, LocalDate data, LocalDateTime hora, boolean retorno_consulta, Medico medico, Funcionario funcionario, Paciente paciente) {
         this.id = id;
         this.data = data;
-        this.hora_consulta = hora_consulta;
+        this.hora = hora;
         this.retorno_consulta = retorno_consulta;
         this.medico = medico;
         this.funcionario = funcionario;
@@ -84,12 +84,12 @@ public class Consulta {
         this.data = data;
     }
 
-    public LocalDateTime getHora_consulta() {
-        return hora_consulta;
+    public LocalDateTime getHora() {
+        return hora;
     }
 
-    public void setHora_consulta(LocalDateTime hora_consulta) {
-        this.hora_consulta = hora_consulta;
+    public void setHora(LocalDateTime hora) {
+        this.hora = hora;
     }
 
     public boolean isRetorno_consulta() {

@@ -45,7 +45,7 @@ public class ConsultaResponseConfirmacaoDTO {
         DateTimeFormatter formatoSaida = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         this.data_consulta = dataConsulta.format(formatoSaida);
 
-        LocalDateTime hora_consulta = consulta.getHora_consulta();
+        LocalDateTime hora_consulta = consulta.getHora();
         LocalTime hora_consulta_sozinha = hora_consulta.toLocalTime();
         this.hora_consulta = hora_consulta_sozinha;
 
