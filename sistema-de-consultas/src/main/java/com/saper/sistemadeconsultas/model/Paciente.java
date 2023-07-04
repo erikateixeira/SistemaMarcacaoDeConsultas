@@ -105,11 +105,7 @@ public class Paciente {
         this.nome = pacienteRequestDTO.nome;
         this.cpf = pacienteRequestDTO.cpf;
         this.passaporte = pacienteRequestDTO.passaporte;
-
-        String dataNascimentoStr = pacienteRequestDTO.data_nascimento;
-        DateTimeFormatter formatoEntrada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        this.data_nascimento = LocalDate.parse(dataNascimentoStr, formatoEntrada);
-
+        this.data_nascimento = LocalDate.parse(pacienteRequestDTO.data_nascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         this.nome_responsavel = pacienteRequestDTO.nome_responsavel;
         this.cpf_responsavel = pacienteRequestDTO.cpf_responsavel;
         this.genero = pacienteRequestDTO.genero;
@@ -122,9 +118,7 @@ public class Paciente {
         this.email = pacienteRequestDTO.email;
         this.plano_saude = pacienteRequestDTO.plano_saude;
         this.num_plano = pacienteRequestDTO.num_plano;
-
-        String dataValidadeStr = pacienteRequestDTO.validade_plano;
-        this.validade_plano = LocalDate.parse(dataValidadeStr, formatoEntrada);
+        this.validade_plano = LocalDate.parse(pacienteRequestDTO.validade_plano, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
     public Set<Consulta> getConsultas() {

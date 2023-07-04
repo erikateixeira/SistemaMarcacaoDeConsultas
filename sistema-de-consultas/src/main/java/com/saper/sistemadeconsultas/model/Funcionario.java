@@ -113,12 +113,7 @@ public class Funcionario implements UserDetails {
         this.nome = funcionarioResquestDTO.nome;
         this.cpf = funcionarioResquestDTO.cpf;
         this.rg = funcionarioResquestDTO.rg;
-
-        String dataNascimentoStr = funcionarioResquestDTO.data_nascimento;
-        DateTimeFormatter formatoEntrada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        this.data_nascimento = LocalDate.parse(dataNascimentoStr, formatoEntrada);
-
-
+        this.data_nascimento = LocalDate.parse(funcionarioResquestDTO.data_nascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         this.endereco = funcionarioResquestDTO.endereco;
         this.cep = funcionarioResquestDTO.cep;
         this.bairro = funcionarioResquestDTO.bairro;

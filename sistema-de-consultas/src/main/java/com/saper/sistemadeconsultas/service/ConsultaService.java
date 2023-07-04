@@ -39,6 +39,7 @@ public class ConsultaService {
     @Autowired
     PacienteRepository pacienteRepository;
 
+
     public ResponseEntity<Object> getAllConsultasPorDia(LocalDate data) {
         List<Consulta> consultaList = consultaRepository.findByData(data);
 
@@ -106,16 +107,13 @@ public class ConsultaService {
             return ResponseEntity.status(HttpStatus.OK).body(consultaResponsePacienteDTOList);}
     }
 
-    /*public Object criarCalendario(Medico medico) {
-        Optional<Medico> medicoOptional = medicoRepository.findByNomeContainingIgnoreCase(medico.getNome());
+    public List<LocalDate> criarCalendario(ConsultaRequestDTO consultaRequestDTO) {
+        Medico medico = medicoRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_medico).orElseThrow(()-> new NoSuchElementException("Médico não encontrado."));
 
+        List<LocalDate> datasValidas = medico.gerarDatasValidas(medico.getDiasDisponiveis());
 
-        DiaSemana[] diasSemana = medicoRequestDTO.getDiasDisponiveis();
-
-        List<LocalDate> datasValidas = gerarDatas
-
-        return Object...
-    }*/
+        return datasValidas;
+    }
 
 
 
@@ -125,10 +123,21 @@ public class ConsultaService {
         Funcionario funcionario = funcionarioRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_funcionario).orElseThrow(()-> new NoSuchElementException("Funcionário não encontrado."));
         Paciente paciente = pacienteRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_paciente).orElseThrow(()-> new NoSuchElementException("Paciente não encontrado."));
 
-        Consulta consulta = new Consulta();
+        List<LocalDate> datasValidas = criarCalendario(consultaRequestDTO);
 
         LocalDate data_consulta = LocalDate.parse(consultaRequestDTO.data_consulta, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+        if(!datasValidas.contains(data_consulta)){
+            throw new IllegalArgumentException("Data inválida para consulta.");
+        }
+
+        Consulta consulta = new Consulta();
+
         consulta.setData(data_consulta);
+        consulta.setMedico(medico);
+        consulta.setRetorno_consulta(consultaRequestDTO.retorno_consulta);
+        consulta.setFuncionario(funcionario);
+        consulta.setPaciente(paciente);
 
         LocalTime hora_consulta_isolada = LocalTime.parse(consultaRequestDTO.hora_consulta, DateTimeFormatter.ofPattern("HH:mm:ss"));
         LocalDateTime hora_consulta = LocalDateTime.of(data_consulta, hora_consulta_isolada);
@@ -138,16 +147,14 @@ public class ConsultaService {
             throw new ConflictStoreException("Conflito: O médico já possui uma consulta agendada para a mesma data e hora.");
         }
 
-        consulta.setMedico(medico);
         consulta.setHora(hora_consulta);
-        consulta.setRetorno_consulta(consultaRequestDTO.retorno_consulta);
-        consulta.setFuncionario(funcionario);
-        consulta.setPaciente(paciente);
 
         try {
-            consulta = consultaRepository.save(consulta);}
+            consulta = consultaRepository.save(consulta);
+        }
         catch (Exception exception){
-            throw new ConflictStoreException("Consulta não pode ser salva devido ao conflito no banco de dados.");}
+            throw new ConflictStoreException("Consulta não pode ser salva devido ao conflito no banco de dados.");
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(new ConsultaResponseDTO(consulta));
     }
 

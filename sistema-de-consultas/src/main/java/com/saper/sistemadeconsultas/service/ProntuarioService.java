@@ -3,6 +3,7 @@ package com.saper.sistemadeconsultas.service;
 import ch.qos.logback.core.net.server.Client;
 import com.saper.sistemadeconsultas.config.FileStorageConfig;
 import com.saper.sistemadeconsultas.dto.*;
+import com.saper.sistemadeconsultas.exception.exceptions.ConflictStoreException;
 import com.saper.sistemadeconsultas.exception.exceptions.FileProcessingException;
 import com.saper.sistemadeconsultas.model.*;
 import com.saper.sistemadeconsultas.repository.ConsultaRepository;
@@ -106,7 +107,12 @@ public class ProntuarioService {
         prontuario.setCaminho(caminho_arquivo.toString());
         prontuario.setConsulta(consulta);
 
-        prontuarioRepository.save(prontuario);
+        try {
+            prontuario = prontuarioRepository.save(prontuario);
+        }
+        catch (Exception exception){
+            throw new ConflictStoreException("Prontuário não pode ser salvo devido ao conflito no banco de dados.");
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new ProntuarioResponseDTO(prontuario));
     }
