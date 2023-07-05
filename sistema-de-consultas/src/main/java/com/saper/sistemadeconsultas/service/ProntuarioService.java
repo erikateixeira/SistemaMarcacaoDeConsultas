@@ -3,11 +3,9 @@ package com.saper.sistemadeconsultas.service;
 import ch.qos.logback.core.net.server.Client;
 import com.saper.sistemadeconsultas.config.FileStorageConfig;
 import com.saper.sistemadeconsultas.dto.*;
+import com.saper.sistemadeconsultas.exception.exceptions.ConflictStoreException;
 import com.saper.sistemadeconsultas.exception.exceptions.FileProcessingException;
-import com.saper.sistemadeconsultas.model.Consulta;
-import com.saper.sistemadeconsultas.model.Medico;
-import com.saper.sistemadeconsultas.model.Paciente;
-import com.saper.sistemadeconsultas.model.Prontuario;
+import com.saper.sistemadeconsultas.model.*;
 import com.saper.sistemadeconsultas.repository.ConsultaRepository;
 import com.saper.sistemadeconsultas.repository.PacienteRepository;
 import com.saper.sistemadeconsultas.repository.ProntuarioRepository;
@@ -27,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -47,17 +46,12 @@ public class ProntuarioService {
 
 
     public ResponseEntity<Object> getAllProntuarioByNome(String nome) {
-        Optional<Paciente> pacienteOptional = pacienteRepository.findByNomeContainingIgnoreCase(nome);
+        Paciente paciente = pacienteRepository.findByNomeContainingIgnoreCase(nome).orElseThrow(()-> new NoSuchElementException("Paciente não encontrado."));
         List<Prontuario> prontuarioList = prontuarioRepository.findByConsultaPacienteNomeContainingIgnoreCase(nome);
 
-        if (pacienteOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Paciente não encontrado.");
-        }
-
         if (prontuarioList.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existem prontuários para o paciente especificado.");
+            throw new NoSuchElementException("Não existem prontuários para: " + nome);
         }
-
         else {
             List<ProntuarioResponseDTO> prontuarioResponseDTOList = prontuarioList.stream()
                     .map(prontuario -> new ProntuarioResponseDTO(prontuario))
@@ -68,19 +62,14 @@ public class ProntuarioService {
 
 
     public ResponseEntity<byte[]> getProntuarioPDF(Long id_prontuario) throws IOException {
-        Optional<Prontuario> prontuarioOptional = prontuarioRepository.findById(id_prontuario);
+        Prontuario prontuario = prontuarioRepository.findById(id_prontuario).orElseThrow(()-> new NoSuchElementException("Prontuário não encontrado."));
 
-        if (prontuarioOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-
-        Prontuario prontuario = prontuarioOptional.get();
         String caminho_arquivo = fileStorageConfig.getUploadPath().resolve(prontuario.getNome()).toString();
 
         File file = new File(caminho_arquivo);
 
         if (!file.exists()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            throw new NoSuchElementException("Arquivo prontuário não existe.");
         }
 
         FileInputStream fileInputStream = new FileInputStream(file);
@@ -97,11 +86,7 @@ public class ProntuarioService {
 
     @Transactional
     public ResponseEntity<Object> save(Long id_consulta, MultipartFile file) {
-        Optional<Consulta> consultaOptional = consultaRepository.findById(id_consulta);
-
-        if(consultaOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Consulta não encontrada.");
-        }
+        Consulta consulta = consultaRepository.findById(id_consulta).orElseThrow(()-> new NoSuchElementException("Consulta não encontrada."));
 
         String nome_arquivo;
         Path caminho_arquivo;
@@ -120,12 +105,16 @@ public class ProntuarioService {
 
         prontuario.setNome(nome_arquivo);
         prontuario.setCaminho(caminho_arquivo.toString());
-        prontuario.setConsulta(consultaOptional.get());
+        prontuario.setConsulta(consulta);
 
-        prontuarioRepository.save(prontuario);
+        try {
+            prontuario = prontuarioRepository.save(prontuario);
+        }
+        catch (Exception exception){
+            throw new ConflictStoreException("Prontuário não pode ser salvo devido ao conflito no banco de dados.");
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new ProntuarioResponseDTO(prontuario));
-
     }
 
 

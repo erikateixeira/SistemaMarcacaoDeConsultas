@@ -1,6 +1,7 @@
 package com.saper.sistemadeconsultas.dto;
 
 import com.saper.sistemadeconsultas.enums.DiaSemana;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalTime;
@@ -34,16 +35,11 @@ public class MedicoRequestDTO {
     public String email;
 
     @NotBlank
-    @Size(max = 30)
-    /*@Pattern.List({
-        @Pattern(regexp = "(?i)cardiologista"),
-        @Pattern(regexp = "(?i)dermatologista"),
-        @Pattern(regexp = "(?i)ginecologista")
-    })*/
+    @Pattern(regexp = "(?i)cardiologista|dermatologista|ginecologista", message = "Especialidade deve ser CARDIOLOGISTA, DERMATOLOGISTA OU GINECOLOGISTA.")
     public String especialidade;
 
     @NotBlank
-    @Size(min = 2, max = 2, message = "Sala deve conter 2 dígitos")
+    @Pattern(regexp = "(?i)01|02|03|04|05|06", message = "Salas existentes: 01, 02, 03, 04, 05 ou 06.")
     public String sala;
 
     @NotBlank
@@ -55,7 +51,10 @@ public class MedicoRequestDTO {
     public String senha;
 
     @NotEmpty(message = "A lista de dias disponíveis não pode estar vazia")
-    public List<String> diasDisponiveis;
+    @Size(max = 7, message = "A lista de dias disponíveis deve conter no máximo 7 elementos")
+    @Valid
+    public List<@Pattern(regexp = "(?i)segunda|terca|quarta|quinta|sexta|sabado|domingo",
+            message = "Dias disponíveis são: SEGUNDA, TERCA, QUARTA, QUINTA, SEXTA, SABADO ou DOMINGO.") String> diasDisponiveis;
 
     @NotBlank
     @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]", message = "Formato de horário inválido. Use o formato HH:MM:SS")

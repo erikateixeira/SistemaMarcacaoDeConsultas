@@ -16,18 +16,23 @@ import java.time.format.DateTimeFormatter;
 public class ConsultaResponseDTO {
 
     public Long id_consulta;
-    public LocalDate data_consulta;
+    public String data_consulta;
     public LocalTime hora_consulta;
     public boolean retorno_consulta;
+
+    public String especialidade;
     public String nome_medico;
     public String nome_paciente;
     public String nome_funcionario;
 
     public ConsultaResponseDTO(Consulta consulta){
         this.id_consulta = consulta.getId();
-        this.data_consulta = consulta.getData();
 
-        LocalDateTime hora_consulta = consulta.getHora_consulta();
+        LocalDate dataConsulta = consulta.getData();
+        DateTimeFormatter formatoSaida = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        this.data_consulta = dataConsulta.format(formatoSaida);
+
+        LocalDateTime hora_consulta = consulta.getHora();
         LocalTime hora_consulta_sozinha = hora_consulta.toLocalTime();
         this.hora_consulta = hora_consulta_sozinha;
 
@@ -36,8 +41,10 @@ public class ConsultaResponseDTO {
         Medico medico = consulta.getMedico();
         if (medico != null) {
             this.nome_medico = consulta.getMedico().getNome();
+            this.especialidade = consulta.getMedico().getEspecialidade();
         } else {
             this.nome_medico = "null";
+            this.especialidade = "null";
         }
 
         Paciente paciente = consulta.getPaciente();
