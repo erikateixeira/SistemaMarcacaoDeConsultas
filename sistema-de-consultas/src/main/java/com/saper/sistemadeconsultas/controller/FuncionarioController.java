@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/funcionario")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+
 public class FuncionarioController {
 
     @Autowired

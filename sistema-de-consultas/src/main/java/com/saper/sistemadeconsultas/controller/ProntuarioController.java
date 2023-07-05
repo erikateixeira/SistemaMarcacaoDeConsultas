@@ -10,7 +10,6 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/prontuario")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ProntuarioController {
 
     @Autowired
@@ -29,7 +28,7 @@ public class ProntuarioController {
 
     @PostMapping
     public Object save(@RequestParam(name = "id_consulta") Long id_consulta,
-                       @RequestParam(name = "file") MultipartFile file)
+            @RequestParam(name = "file") MultipartFile file)
             throws IOException {
         return prontuarioService.save(id_consulta, file);
     }

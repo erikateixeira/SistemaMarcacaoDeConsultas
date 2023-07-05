@@ -16,27 +16,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/my")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+
 public class MyController {
 
     @Autowired
     MyService myService;
 
     @GetMapping("/usuario")
-    public ResponseEntity<Object> getUsuario(){
+    public ResponseEntity<Object> getUsuario() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if(principal instanceof Funcionario funcionario) {
-            return ResponseEntity.status(HttpStatus.OK).body(new FuncionarioResponseDTO(myService.getLoggedFuncionario()));
-        }
-        else if (principal instanceof Medico medico) {
+        if (principal instanceof Funcionario funcionario) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new FuncionarioResponseDTO(myService.getLoggedFuncionario()));
+        } else if (principal instanceof Medico medico) {
             return ResponseEntity.status(HttpStatus.OK).body(new MedicoResponseDTO(myService.getLoggedMedico()));
-        }
-        else{
+        } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
-
-
 
 }
