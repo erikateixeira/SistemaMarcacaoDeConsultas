@@ -25,6 +25,10 @@ public class ConsultaRequestDTO {
     public boolean retorno_consulta;
 
     @NotBlank
+    @Pattern(regexp = "(?i)cardiologista|dermatologista|ginecologista", message = "Especialidade deve ser CARDIOLOGISTA, DERMATOLOGISTA OU GINECOLOGISTA.")
+    public String especialidade;
+
+    @NotBlank
     @Size(min = 10, max = 80)
     public String nome_medico;
 

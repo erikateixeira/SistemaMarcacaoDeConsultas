@@ -21,7 +21,7 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
     List<Consulta> findByDataAndPacienteNomeContainingIgnoreCase(LocalDate data, String nome);
     List<Consulta> findByPacienteNomeContainingIgnoreCase(String nome);
     boolean existsByMedicoAndHora(Medico medico, LocalDateTime hora);
-
+    List<Consulta> findByMedicoAndData(Medico medico, LocalDate date);
 }
 
 

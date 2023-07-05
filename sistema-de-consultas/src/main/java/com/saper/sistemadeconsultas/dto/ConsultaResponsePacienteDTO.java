@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 
 public class ConsultaResponsePacienteDTO {
 
+    public Long id_consulta;
     public String nome_paciente;
     public String nome_medico;
     public String data_consulta;
@@ -44,6 +45,7 @@ public class ConsultaResponsePacienteDTO {
         this.hora_consulta = hora_consulta_sozinha;
 
         this.retorno_consulta = consulta.isRetorno_consulta();
+        this.id_consulta = consulta.getId();
 
     }
 

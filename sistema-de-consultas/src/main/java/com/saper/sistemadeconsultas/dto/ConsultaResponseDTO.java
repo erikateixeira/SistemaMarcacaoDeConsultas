@@ -19,6 +19,8 @@ public class ConsultaResponseDTO {
     public String data_consulta;
     public LocalTime hora_consulta;
     public boolean retorno_consulta;
+
+    public String especialidade;
     public String nome_medico;
     public String nome_paciente;
     public String nome_funcionario;
@@ -39,8 +41,10 @@ public class ConsultaResponseDTO {
         Medico medico = consulta.getMedico();
         if (medico != null) {
             this.nome_medico = consulta.getMedico().getNome();
+            this.especialidade = consulta.getMedico().getEspecialidade();
         } else {
             this.nome_medico = "null";
+            this.especialidade = "null";
         }
 
         Paciente paciente = consulta.getPaciente();

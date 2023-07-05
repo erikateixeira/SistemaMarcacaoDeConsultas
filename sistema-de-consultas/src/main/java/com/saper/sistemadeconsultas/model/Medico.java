@@ -165,46 +165,6 @@ public class Medico implements UserDetails {
         this.consultas = consultas;
     }
 
-    public List<LocalDate> gerarDatasValidas(List<DiaSemana> diasDisponiveis) {
-        List<LocalDate> datasValidas = new ArrayList<>();
-        LocalDate dataAtual = LocalDate.now();
-        LocalDate dataFim = dataAtual.plusMonths(3);
-
-        while (!dataAtual.isAfter(dataFim)) {
-            for (DiaSemana diaSemana : diasDisponiveis) {
-                if (dataAtual.getDayOfWeek() == diaSemanaToDayOfWeek(diaSemana)) {
-                    datasValidas.add(dataAtual);
-                    break;
-                }
-            }
-            dataAtual = dataAtual.plusDays(1);
-        }
-
-        return datasValidas;
-    }
-
-    public DayOfWeek diaSemanaToDayOfWeek(DiaSemana diaSemana) {
-        switch (diaSemana) {
-            case SEGUNDA:
-                return DayOfWeek.MONDAY;
-            case TERCA:
-                return DayOfWeek.TUESDAY;
-            case QUARTA:
-                return DayOfWeek.WEDNESDAY;
-            case QUINTA:
-                return DayOfWeek.THURSDAY;
-            case SEXTA:
-                return DayOfWeek.FRIDAY;
-            case SABADO:
-                return DayOfWeek.SATURDAY;
-            case DOMINGO:
-                return DayOfWeek.SUNDAY;
-            default:
-                throw new IllegalArgumentException("Dia da semana inválido: " + diaSemana);
-        }
-    }
-
-
     public Medico(Long id, String nome, String cnpj, String crm_estado, String crm_num, String telefone, String email, String especialidade, String sala, String login, String senha, LocalDateTime hora_inicial, LocalDateTime hora_final, Long valor_consulta) {
         this.id = id;
         this.nome = nome;
