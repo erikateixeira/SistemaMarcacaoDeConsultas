@@ -15,7 +15,7 @@ public class RedirectionController {
         // Realizar lógica necessária antes do redirecionamento, se necessário
 
         // Redirecionar para o outro servidor
-        String redirectUrl = "http://localhost:5173/";
+        String redirectUrl = "http://localhost:5175/";
         return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).header("Location", redirectUrl).build();
     }
 }
