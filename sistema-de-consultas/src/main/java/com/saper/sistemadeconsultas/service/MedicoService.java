@@ -59,8 +59,8 @@ public class MedicoService {
     }
 
     @Transactional
-    public ResponseEntity<Object> save(MedicoRequestDTO medicoRequestDTO) {
-        Medico medico = new Medico(medicoRequestDTO);
+    public ResponseEntity<Object> save(MedicoRequestSaveDTO medicoRequestSaveDTO) {
+        Medico medico = new Medico(medicoRequestSaveDTO);
 
         setRoleAsMedico(medico);
 

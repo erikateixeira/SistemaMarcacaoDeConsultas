@@ -1,14 +1,11 @@
 package com.saper.sistemadeconsultas.dto;
 
-import com.saper.sistemadeconsultas.enums.DiaSemana;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
-import java.time.LocalTime;
 import java.util.List;
 
-
-public class MedicoRequestDTO {
+public class MedicoRequestSaveDTO {
 
     @NotBlank
     @Size(min = 10, max = 80)
@@ -46,6 +43,7 @@ public class MedicoRequestDTO {
     @Size(max = 30)
     public String login;
 
+    @NotBlank
     @Size(max = 15)
     public String senha;
 
@@ -79,4 +77,5 @@ public class MedicoRequestDTO {
     public String getHora_final() {
         return hora_final;
     }
+
 }
