@@ -40,5 +40,59 @@ public class ConsultaRequestDTO {
     @Size(min = 10, max = 80)
     public String nome_paciente;
 
+    public String getData_consulta() {
+        return data_consulta;
+    }
 
+    public void setData_consulta(String data_consulta) {
+        this.data_consulta = data_consulta;
+    }
+
+    public String getHora_consulta() {
+        return hora_consulta;
+    }
+
+    public void setHora_consulta(String hora_consulta) {
+        this.hora_consulta = hora_consulta;
+    }
+
+    public boolean isRetorno_consulta() {
+        return retorno_consulta;
+    }
+
+    public void setRetorno_consulta(boolean retorno_consulta) {
+        this.retorno_consulta = retorno_consulta;
+    }
+
+    public String getEspecialidade() {
+        return especialidade;
+    }
+
+    public void setEspecialidade(String especialidade) {
+        this.especialidade = especialidade;
+    }
+
+    public String getNome_medico() {
+        return nome_medico;
+    }
+
+    public void setNome_medico(String nome_medico) {
+        this.nome_medico = nome_medico;
+    }
+
+    public String getNome_funcionario() {
+        return nome_funcionario;
+    }
+
+    public void setNome_funcionario(String nome_funcionario) {
+        this.nome_funcionario = nome_funcionario;
+    }
+
+    public String getNome_paciente() {
+        return nome_paciente;
+    }
+
+    public void setNome_paciente(String nome_paciente) {
+        this.nome_paciente = nome_paciente;
+    }
 }

@@ -9,6 +9,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @RestController
 @RequestMapping("/consulta")
@@ -17,6 +20,35 @@ public class ConsultaController {
 
     @Autowired
     ConsultaService consultaService;
+
+    @GetMapping("/medicos-disponiveis")
+    public List<String> getMedicosDisponiveis(@RequestParam("especialidade") String especialidade) {
+        ConsultaRequestDTO consultaRequestDTO = new ConsultaRequestDTO();
+        consultaRequestDTO.setEspecialidade(especialidade);
+
+        return consultaService.medicosDisponiveis(consultaRequestDTO);
+    }
+
+    @GetMapping("/datas-disponiveis")
+    public List<LocalDate> getHorariosDisponiveis(@RequestParam("nome_medico") String nome_medico) {
+        ConsultaRequestDTO consultaRequestDTO = new ConsultaRequestDTO();
+        consultaRequestDTO.setNome_medico(nome_medico);
+
+        return consultaService.criarCalendario(consultaRequestDTO);
+    }
+
+    @GetMapping("/horas-validas")
+    public List<LocalTime> getHorasValidas(
+            @RequestParam("nome_medico") String nome_medico,
+            @RequestParam("data_consulta") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate data_consulta) {
+
+        ConsultaRequestDTO consultaRequestDTO = new ConsultaRequestDTO();
+        consultaRequestDTO.setNome_medico(nome_medico);
+        consultaRequestDTO.setData_consulta(data_consulta.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+
+        return consultaService.criarAgenda(consultaRequestDTO);
+    }
+
 
     @GetMapping("/dia")
     public Object getAllConsultasPorDia(
