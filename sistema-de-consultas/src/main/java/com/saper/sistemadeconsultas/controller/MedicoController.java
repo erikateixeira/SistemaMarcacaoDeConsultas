@@ -1,6 +1,7 @@
 package com.saper.sistemadeconsultas.controller;
 
 import com.saper.sistemadeconsultas.dto.MedicoRequestDTO;
+import com.saper.sistemadeconsultas.dto.MedicoRequestSaveDTO;
 import com.saper.sistemadeconsultas.model.Funcionario;
 import com.saper.sistemadeconsultas.model.Medico;
 import com.saper.sistemadeconsultas.service.MedicoService;
@@ -27,8 +28,8 @@ public class MedicoController {
     }
 
     @PostMapping
-    public Object save(@Valid @RequestBody MedicoRequestDTO medicoRequestDTO) {
-        return medicoService.save(medicoRequestDTO);
+    public Object save(@Valid @RequestBody MedicoRequestSaveDTO medicoRequestSaveDTO) {
+        return medicoService.save(medicoRequestSaveDTO);
     }
 
     @PutMapping

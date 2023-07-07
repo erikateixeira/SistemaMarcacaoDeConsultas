@@ -1,6 +1,7 @@
 package com.saper.sistemadeconsultas.model;
 
 import com.saper.sistemadeconsultas.dto.MedicoRequestDTO;
+import com.saper.sistemadeconsultas.dto.MedicoRequestSaveDTO;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -155,6 +156,35 @@ public class Medico implements UserDetails {
         this.hora_final = hora_final;
 
         this.valor_consulta = medicoRequestDTO.valor_consulta;
+    }
+
+    public Medico(MedicoRequestSaveDTO medicoRequestSaveDTO){
+        this.nome = medicoRequestSaveDTO.nome;
+        this.cnpj = medicoRequestSaveDTO.cnpj;
+        this.crm_estado = medicoRequestSaveDTO.crm_estado;
+        this.crm_num = medicoRequestSaveDTO.crm_num;
+        this.telefone = medicoRequestSaveDTO.telefone;
+        this.email = medicoRequestSaveDTO.email;
+        this.especialidade = medicoRequestSaveDTO.especialidade;
+        this.sala = medicoRequestSaveDTO.sala;
+        this.login = medicoRequestSaveDTO.login;
+
+        if(medicoRequestSaveDTO.senha!=null) {
+            this.senha = new BCryptPasswordEncoder().encode(medicoRequestSaveDTO.senha);
+        }
+
+        this.diasDisponiveis = convertDiasDisponiveis(medicoRequestSaveDTO.diasDisponiveis);
+
+        LocalDate data_cadastro = LocalDate.now();
+        LocalTime hora_inicial_isolada = LocalTime.parse(medicoRequestSaveDTO.getHora_inicial(), DateTimeFormatter.ofPattern("HH:mm:ss"));
+        LocalDateTime hora_inicial = LocalDateTime.of(data_cadastro, hora_inicial_isolada);
+        this.hora_inicial = hora_inicial;
+
+        LocalTime hora_final_isolada = LocalTime.parse(medicoRequestSaveDTO.getHora_final(), DateTimeFormatter.ofPattern("HH:mm:ss"));
+        LocalDateTime hora_final = LocalDateTime.of(data_cadastro, hora_final_isolada);
+        this.hora_final = hora_final;
+
+        this.valor_consulta = medicoRequestSaveDTO.valor_consulta;
     }
 
     public Set<Consulta> getConsultas() {

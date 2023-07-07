@@ -1,0 +1,32 @@
+.especialidades {
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.doc1,
+.doc2,
+.doc3 {
+  height: 150px;
+  width: 150px;
+}
+
+.doc1 {
+  margin-right: 100px;
+  display: block;
+  margin: 0 auto;
+}
+
+.doc3 {
+  margin-left: 100px;
+}
+
+.destaque,
+h6 {
+  font-weight: bold;
+}
+
+.logo {
+  height: 100px;
+  width: 150px;
+}
