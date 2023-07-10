@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-
 public class ConsultaResponseAtendimentoDTO {
 
     public Long id_consulta;
@@ -29,8 +28,7 @@ public class ConsultaResponseAtendimentoDTO {
     public Long valor_consulta;
     public String nome_funcionario;
 
-
-    public ConsultaResponseAtendimentoDTO(Consulta consulta){
+    public ConsultaResponseAtendimentoDTO(Consulta consulta) {
         this.id_consulta = consulta.getId();
 
         Medico medico = consulta.getMedico();
@@ -62,8 +60,10 @@ public class ConsultaResponseAtendimentoDTO {
             this.plano_saude = consulta.getPaciente().getPlano_saude();
             this.num_plano = consulta.getPaciente().getNum_plano();
 
-            LocalDate validadePlano = consulta.getPaciente().getValidade_plano();
-            this.validade_plano = validadePlano.format(formatoSaida);
+            if (consulta.getPaciente().getValidade_plano() != null) {
+                LocalDate validadePlano = consulta.getPaciente().getValidade_plano();
+                this.validade_plano = validadePlano.format(formatoSaida);
+            }
 
         } else {
             this.nome_paciente = "null";
@@ -80,8 +80,5 @@ public class ConsultaResponseAtendimentoDTO {
         }
 
     }
-
-
-
 
 }

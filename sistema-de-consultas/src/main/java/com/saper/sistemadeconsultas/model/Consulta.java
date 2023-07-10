@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-
 @Entity
 public class Consulta {
 
@@ -20,7 +19,7 @@ public class Consulta {
     @Column(name = "id_consulta")
     private Long id;
 
-    @Column(name= "data_consulta",nullable = false)
+    @Column(name = "data_consulta", nullable = false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate data;
 
@@ -29,6 +28,12 @@ public class Consulta {
 
     @Column(nullable = false)
     private boolean retorno_consulta;
+
+    private boolean confirmacao;
+
+    private boolean autorizacao;
+
+    private boolean pagamento;
 
     @ManyToOne
     @JoinColumn(name = "id_medico", referencedColumnName = "id_medico")
@@ -42,7 +47,7 @@ public class Consulta {
     @JoinColumn(name = "id_paciente", referencedColumnName = "id_paciente")
     Paciente paciente;
 
-    @OneToOne(mappedBy = "consulta", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @OneToOne(mappedBy = "consulta", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
     @JoinColumn(name = "id_prontuario")
     Prontuario prontuario;
 
@@ -58,14 +63,42 @@ public class Consulta {
     public Consulta() {
     }
 
-    public Consulta(Long id, LocalDate data, LocalDateTime hora, boolean retorno_consulta, Medico medico, Funcionario funcionario, Paciente paciente) {
+    public Consulta(Long id, LocalDate data, LocalDateTime hora, boolean retorno_consulta, boolean confirmacao,
+            boolean autorizacao, boolean pagamento, Medico medico, Funcionario funcionario, Paciente paciente) {
         this.id = id;
         this.data = data;
         this.hora = hora;
         this.retorno_consulta = retorno_consulta;
+        this.confirmacao = confirmacao;
+        this.autorizacao = autorizacao;
+        this.pagamento = pagamento;
         this.medico = medico;
         this.funcionario = funcionario;
         this.paciente = paciente;
+    }
+
+    public boolean isConfirmacao() {
+        return confirmacao;
+    }
+
+    public void setConfirmacao(boolean confirmacao) {
+        this.confirmacao = confirmacao;
+    }
+
+    public boolean isAutorizacao() {
+        return autorizacao;
+    }
+
+    public void setAutorizacao(boolean autorizacao) {
+        this.autorizacao = autorizacao;
+    }
+
+    public boolean isPagamento() {
+        return pagamento;
+    }
+
+    public void setPagamento(boolean pagamento) {
+        this.pagamento = pagamento;
     }
 
     public Long getId() {
