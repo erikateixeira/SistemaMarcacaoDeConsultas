@@ -1,0 +1,78 @@
+.apresentacao {
+    width: 95%;
+    margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+    .apresentacao {
+        width: 60%;
+        margin: 0 auto;
+    }
+}
+
+.imagem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.imagem img {
+    width: 50%;
+    max-width: 100%;
+    height: auto;
+}
+
+.logo {
+    display: inline;
+    margin-left: 5px;
+}
+
+.logo-container {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 10px;
+    /* Adjust the margin as needed */
+}
+
+
+h2 {
+    font-size: 34px;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+h5 {
+    font-size: 30px;
+    font-style: italic;
+}
+
+.depoimento {
+    margin-bottom: 20px;
+}
+
+.estrela {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.avaliacao .estrela {
+    display: inline-block;
+    text-align: center;
+    margin-right: 5px;
+}
+
+.depoimento .medico {
+    font-size: 24px;
+    padding-bottom: 2%;
+}
+
+.depoimento .paciente {
+    font-size: 18px;
+    text-align: right;
+}
+
+.depoimento .comentario {
+    font-size: 20px;
+}

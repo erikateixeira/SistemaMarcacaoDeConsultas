@@ -1,0 +1,29 @@
+img {
+  height: 100%;
+  width: 100%;
+}
+
+h2 {
+  padding: 20px;
+  text-align: center;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.local,
+.tel,
+.textocontato,
+.whats {
+  padding: 5px;
+  text-align: center;
+}
+
+.textocontato {
+  padding-bottom: 4%;
+  text-align: center;
+}
+
+span,
+svg {
+  color: black;
+}

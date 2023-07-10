@@ -1,0 +1,40 @@
+.empresa {
+  width: 95%;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .empresa {
+    width: 60%;
+    margin: 0 auto;
+  }
+}
+
+
+p {
+  padding-bottom: 5%;
+}
+
+
+h2 {
+  font-size: 34px;
+  font-weight: bold;
+  margin: 20px 0;
+}
+
+h3 {
+  text-align: center;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  font-size: 30px;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.detalhes {
+  text-align: center;
+}
+
+ul {
+  list-style: disc;
+}

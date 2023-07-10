@@ -1,0 +1,82 @@
+.especialidades {
+  text-align: center;
+}
+
+.topo {
+  width: 95%;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .topo {
+    width: 50%;
+    margin: 0 auto;
+  }
+}
+
+
+.doc1,
+.doc2,
+.doc3 {
+  height: 150px;
+  width: 150px;
+}
+
+.doc1 {
+  margin-right: 100px;
+  display: block;
+  margin: 0 auto;
+}
+
+.doc3 {
+  margin-left: 100px;
+}
+
+.destaque,
+h6 {
+  font-weight: bold;
+}
+
+.logo {
+  height: 100px;
+  width: 150px;
+}
+
+.button-link {
+  align-items: center;
+  display: inline-block;
+  padding: 10px 20px;
+  margin-left: 20%;
+  margin-bottom: 5%;
+  background-color: #79CEE8;
+  color: black;
+  text-decoration: none;
+  border: 10cm;
+  border-color: #062142;
+  border-radius: 100px;
+  cursor: pointer;
+  font-size: xx-large;
+}
+
+.button-link:hover {
+  background-color: #062142;
+  color: #79CEE8;
+}
+
+.button-link h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.symbol {
+  width: 200px;
+  height: auto;
+  margin-bottom: 5%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}

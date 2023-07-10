@@ -1,0 +1,51 @@
+.especialidades {
+    text-align: center;
+    width: 95%;
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+@media (min-width: 768px) {
+    .especialidades {
+        text-align: center;
+        width: 60%;
+        margin: 0 auto;
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+}
+
+.doc1 {
+    text-align: center;
+    height: 150px;
+    width: 150px;
+
+}
+
+.destaque,
+h6 {
+    font-weight: bold;
+}
+
+.rodape {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.button-link {
+    margin-top: 10%;
+    background-color: #79CEE8;
+    color: black;
+    border-color: #062142;
+    text-align: right;
+}
+
+.button-link:hover {
+    background-color: #062142;
+    color: #79CEE8;
+}
+
+.line {
+    width: 80%;
+}

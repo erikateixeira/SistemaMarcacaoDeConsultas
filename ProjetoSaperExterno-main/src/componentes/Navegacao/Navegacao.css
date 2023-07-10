@@ -1,0 +1,29 @@
+a {
+  color: #ffffff;
+  margin-right: 80px;
+}
+
+
+.whatsapp-button {
+  display: inline-block;
+  padding: 10px 10px;
+  background-color: #79cee8;
+  color: #fff;
+  text-decoration: none;
+  border: #062142;
+  border-radius: 20px;
+}
+
+.whatsapp-button:hover {
+  display: inline-block;
+  padding: 10px 10px;
+  background-color: #fff;
+  color: #79cee8;
+  text-decoration: none;
+  border: #062142;
+  border-radius: 20px;
+}
+
+.custom-navbar {
+  background-color: #062142;
+}
