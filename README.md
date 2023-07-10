@@ -1,10 +1,11 @@
 # Sistema de Marcação de Consultas
 > Projeto do curso de Desenvolvimento WEB - Saper.edu
 
+
 # Grupo:
-* Débora da Silva Sousa
-* Érika Maria Taveira dos Santos Teixeira
-* Hellry Robert Oliveira Souza
+* Débora da Silva Sousa - Front-End Externo
+* Érika Maria Taveira dos Santos Teixeira - Back-End e Integração React
+* Hellry Robert Oliveira Souza - Front-end Externo e Interno e Integração React
 
 # Logomarca
 ![Première Santé](https://github.com/erikateixeira/SistemaMarcacaoDeConsultas/blob/3250534466fce7b9a3e21f57539394a2ca5216bf/imagens/Premi%C3%A8re%20Sant%C3%A9.jpg)
