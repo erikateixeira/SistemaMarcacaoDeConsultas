@@ -1,0 +1,37 @@
+body{
+    margin: 0px;
+    padding: 0px;
+    background-color:#062142;
+    color:#ffffff;
+    font-family: 'Comfortaa', cursive;
+    text-align: center;
+}
+
+
+.navegacao{
+    text-align: center;
+}
+
+img{
+    height: 100px;
+    width: 150px;
+
+    
+}            
+ 
+ .login{
+    padding-right: 30px;          
+ }
+
+ .row{
+    text-align: center;
+ }
+
+ #btncontato{
+    font-size: 20px;
+    background-color:#79CEE8;
+    border-radius: 10px;
+    text-align: center;
+    width: 200px;  
+    margin-top: 50px;
+ }

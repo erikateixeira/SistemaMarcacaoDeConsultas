@@ -1,0 +1,12 @@
+#btncontato{
+    font-size: 15px;
+    border-radius: 10px;
+    text-align: center;
+    width: 200px;  
+    margin-top: 10px;
+}
+
+.row{
+    border: solid;
+    background: #062142;
+}
