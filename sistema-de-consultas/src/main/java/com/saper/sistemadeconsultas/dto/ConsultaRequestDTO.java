@@ -15,7 +15,7 @@ import java.time.LocalTime;
 
 public class ConsultaRequestDTO {
 
-    @Pattern(regexp = "\\d{2}/\\d{2}/\\d{4}", message = "Formato de data deve ser dd/mm/yyyy")
+    @NotBlank
     public String data_consulta;
 
     @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]", message = "Formato de horário inválido. Use o formato HH:MM:SS")

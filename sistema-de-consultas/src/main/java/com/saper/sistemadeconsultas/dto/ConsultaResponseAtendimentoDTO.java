@@ -62,8 +62,11 @@ public class ConsultaResponseAtendimentoDTO {
             this.plano_saude = consulta.getPaciente().getPlano_saude();
             this.num_plano = consulta.getPaciente().getNum_plano();
 
-            LocalDate validadePlano = consulta.getPaciente().getValidade_plano();
-            this.validade_plano = validadePlano.format(formatoSaida);
+            if(consulta.getPaciente().getValidade_plano()!=null) {
+                LocalDate validadePlano = consulta.getPaciente().getValidade_plano();
+                this.validade_plano = validadePlano.format(formatoSaida);
+            }
+
 
         } else {
             this.nome_paciente = "null";

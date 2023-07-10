@@ -41,11 +41,14 @@ public class ConsultaService {
     PacienteRepository pacienteRepository;
 
 
-    public ResponseEntity<Object> getAllConsultasPorDia(LocalDate data) {
-        List<Consulta> consultaList = consultaRepository.findByData(data);
+    public ResponseEntity<Object> getAllConsultasPorDia(String data) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate localDate = LocalDate.parse(data, formatter);
+
+        List<Consulta> consultaList = consultaRepository.findByData(localDate);
 
         if (consultaList.isEmpty()) {
-            throw new NoSuchElementException("Não existem consultas na data: " + data);}
+            throw new NoSuchElementException("Não existem consultas na data: " + localDate);}
         else {
             List<ConsultaResponseDTO> consultaResponseList = consultaList.stream()
                     .map(consulta -> new ConsultaResponseDTO(consulta))
@@ -54,9 +57,13 @@ public class ConsultaService {
     }
 
 
-    public ResponseEntity<Object> getAllConsultasDoMedicoPorDia(String nome, LocalDate data) {
+    public ResponseEntity<Object> getAllConsultasDoMedicoPorDia(String nome, String data) {
         Medico medico = medicoRepository.findByNomeContainingIgnoreCase(nome).orElseThrow(()-> new NoSuchElementException("Médico não encontrado."));
-        List<Consulta> consultaList = consultaRepository.findByDataAndMedicoNomeContainingIgnoreCase(data, nome);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate localDate = LocalDate.parse(data, formatter);
+
+        List<Consulta> consultaList = consultaRepository.findByDataAndMedicoNomeContainingIgnoreCase(localDate, nome);
 
         if (consultaList.isEmpty()) {
             throw new NoSuchElementException("Não existem consultas na data " + data + " para " + nome);}
@@ -67,31 +74,35 @@ public class ConsultaService {
             return ResponseEntity.status(HttpStatus.OK).body(consultaResponseMedicoDTOList);}
     }
 
-    public ResponseEntity<Object> getAllConsultasDoMedicoParaConfirmacao(String nome, LocalDate data) {
-        Medico medico = medicoRepository.findByNomeContainingIgnoreCase(nome).orElseThrow(()-> new NoSuchElementException("Médico não encontrado."));
-        List<Consulta> consultaList = consultaRepository.findByDataAndMedicoNomeContainingIgnoreCase(data, nome);
+    public ResponseEntity<Object> getConfirmacao(Long id_consulta) {
+        Optional<Consulta> consultaOptional = consultaRepository.findById(id_consulta);
 
-        if (consultaList.isEmpty()) {
-            throw new NoSuchElementException("Não existem consultas na data " + data + " para " + nome);}
-        else {
-            List<ConsultaResponseConfirmacaoDTO> consultaResponseConfirmacaoDTOList = consultaList.stream()
-                    .map(consulta -> new ConsultaResponseConfirmacaoDTO(consulta))
-                    .collect(Collectors.toList());
-            return ResponseEntity.status(HttpStatus.OK).body(consultaResponseConfirmacaoDTOList);}
+        if (consultaOptional.isEmpty()) {
+            throw new NoSuchElementException("Não existe consulta para o id" + id_consulta);
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(new ConsultaResponseConfirmacaoDTO(consultaOptional.get()));
+        }
     }
 
 
-    public ResponseEntity<Object> getConsultaDoPacienteParaAtendimento(String nome, LocalDate data) {
-        Paciente paciente = pacienteRepository.findByNomeContainingIgnoreCase(nome).orElseThrow(()-> new NoSuchElementException("Paciente não encontrado."));
-        List<Consulta> consultaList = consultaRepository.findByDataAndPacienteNomeContainingIgnoreCase(data, nome);
+    public ResponseEntity<Object> getConsultaDoPacienteParaAtendimento(Long id_consulta) {
+        Optional<Consulta> consultaOptional = consultaRepository.findById(id_consulta);
 
-        if (consultaList.isEmpty()) {
-            throw new NoSuchElementException("Não existem consultas na data " + data + " para " + nome);}
-        else {
-            List<ConsultaResponseAtendimentoDTO> consultaResponseAtendimentoDTOList = consultaList.stream()
-                    .map(consulta -> new ConsultaResponseAtendimentoDTO(consulta))
-                    .collect(Collectors.toList());
-            return ResponseEntity.status(HttpStatus.OK).body(consultaResponseAtendimentoDTOList);}
+        if (consultaOptional.isEmpty()) {
+            throw new NoSuchElementException("Não existe consulta para o id" + id_consulta);
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(new ConsultaResponseAtendimentoDTO(consultaOptional.get()));
+        }
+    }
+
+    public ResponseEntity<Object> getIniciarConsulta(Long id_consulta) {
+        Optional<Consulta> consultaOptional = consultaRepository.findById(id_consulta);
+
+        if (consultaOptional.isEmpty()) {
+            throw new NoSuchElementException("Não existe consulta para o id" + id_consulta);
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(new ConsultaResponseIniciarDTO(consultaOptional.get()));
+        }
     }
 
     public ResponseEntity<Object> getConsultasDoPaciente(String nome) {
@@ -188,12 +199,19 @@ public class ConsultaService {
         return datasValidas;
     }
 
-    public List<LocalDate> criarCalendario(ConsultaRequestDTO consultaRequestDTO) {
+
+    public List<String> criarCalendario(ConsultaRequestDTO consultaRequestDTO) {
         Medico medico = medicoRepository.findByNomeContainingIgnoreCase(consultaRequestDTO.nome_medico).orElseThrow(()-> new NoSuchElementException("Médico não encontrado."));
 
         List<LocalDate> datasValidas = gerarDatasValidas(medico.getDiasDisponiveis());
 
-        return datasValidas;
+        DateTimeFormatter formatoSaida = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        List<String> datasValidasFormatada = datasValidas.stream()
+                .map(data -> data.format(formatoSaida))
+                .collect(Collectors.toList());
+
+        return datasValidasFormatada;
     }
 
     public List<LocalTime> criarAgenda(ConsultaRequestDTO consultaRequestDTO) {
@@ -236,7 +254,12 @@ public class ConsultaService {
             throw new IllegalArgumentException("Médico não está disponível para a especialidade selecionada.");
         }
 
-        List<LocalDate> datasValidas = criarCalendario(consultaRequestDTO);
+        DateTimeFormatter formatoEntrada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        List<String> datasValidasFormatadas = criarCalendario(consultaRequestDTO);
+
+        List<LocalDate> datasValidas = datasValidasFormatadas.stream()
+                .map(data -> LocalDate.parse(data, formatoEntrada))
+                .collect(Collectors.toList());
 
         LocalDate data_consulta = LocalDate.parse(consultaRequestDTO.data_consulta, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
@@ -283,6 +306,36 @@ public class ConsultaService {
     }
 
     @Transactional
+    public ResponseEntity<Boolean> update1(Long id_consulta, Boolean confirmacao){
+        Consulta consulta = consultaRepository.findById(id_consulta).orElseThrow(()-> new NoSuchElementException("Consulta não encontrada."));
+
+        consulta.setConfirmacao(confirmacao);
+        consultaRepository.save(consulta);
+
+        return ResponseEntity.status(HttpStatus.OK).body(confirmacao);
+    }
+
+    @Transactional
+    public ResponseEntity<Boolean> update2(Long id_consulta, Boolean autorizacao){
+        Consulta consulta = consultaRepository.findById(id_consulta).orElseThrow(()-> new NoSuchElementException("Consulta não encontrada."));
+
+        consulta.setAutorizacao(autorizacao);
+        consultaRepository.save(consulta);
+
+        return ResponseEntity.status(HttpStatus.OK).body(autorizacao);
+    }
+
+    @Transactional
+    public ResponseEntity<Boolean> update3(Long id_consulta, Boolean pagamento){
+        Consulta consulta = consultaRepository.findById(id_consulta).orElseThrow(()-> new NoSuchElementException("Consulta não encontrada."));
+
+        consulta.setPagamento(pagamento);
+        consultaRepository.save(consulta);
+
+        return ResponseEntity.status(HttpStatus.OK).body(pagamento);
+    }
+
+    @Transactional
     public ResponseEntity<Object> update(Long id_consulta, ConsultaRequestDTO consultaRequestDTO) {
         Consulta consulta = consultaRepository.findById(id_consulta).orElseThrow(()-> new NoSuchElementException("Consulta não encontrada."));
 
@@ -307,7 +360,13 @@ public class ConsultaService {
                 nova_hora_consulta_isolada = LocalTime.parse(consultaRequestDTO.hora_consulta, DateTimeFormatter.ofPattern("HH:mm:ss"));
                 nova_hora_consulta = LocalDateTime.of(nova_data_consulta, nova_hora_consulta_isolada);
 
-                List<LocalDate> datasValidas = criarCalendario(consultaRequestDTO);
+                DateTimeFormatter formatoEntrada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                List<String> datasValidasFormatadas = criarCalendario(consultaRequestDTO);
+
+                List<LocalDate> datasValidas = datasValidasFormatadas.stream()
+                        .map(data -> LocalDate.parse(data, formatoEntrada))
+                        .collect(Collectors.toList());
+
                 List<LocalTime> horasValidas = criarAgenda(consultaRequestDTO);
 
                 if (!datasValidas.contains(nova_data_consulta)) {

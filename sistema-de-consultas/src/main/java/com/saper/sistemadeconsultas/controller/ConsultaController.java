@@ -30,7 +30,7 @@ public class ConsultaController {
     }
 
     @GetMapping("/datas-disponiveis")
-    public List<LocalDate> getHorariosDisponiveis(@RequestParam("nome_medico") String nome_medico) {
+    public List<String> getHorariosDisponiveis(@RequestParam("nome_medico") String nome_medico) {
         ConsultaRequestDTO consultaRequestDTO = new ConsultaRequestDTO();
         consultaRequestDTO.setNome_medico(nome_medico);
 
@@ -51,26 +51,29 @@ public class ConsultaController {
 
 
     @GetMapping("/dia")
-    public Object getAllConsultasPorDia(@RequestParam(name = "data") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate data){
+    public Object getAllConsultasPorDia(@RequestParam(name = "data") @DateTimeFormat(pattern = "dd/MM/yyyy") String data){
         return consultaService.getAllConsultasPorDia(data);
     }
 
     @GetMapping("/lista")
     public Object getAllConsultasDoMedicoPorDia(@RequestParam(name = "nome", defaultValue = "") String nome,
-                                                 @RequestParam(name = "data") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate data) {
+                                                 @RequestParam(name = "data") @DateTimeFormat(pattern = "dd/MM/yyyy") String data) {
         return consultaService.getAllConsultasDoMedicoPorDia(nome, data);
     }
 
     @GetMapping("/confirmacao")
-    public Object getAllConsultasDoMedicoParaConfirmacao(@RequestParam(name = "nome", defaultValue = "") String nome,
-                                                         @RequestParam(name = "data") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate data) {
-        return consultaService.getAllConsultasDoMedicoParaConfirmacao(nome, data);
+    public Object getConfirmacao(@RequestParam(name = "id_consulta") Long id_consulta) {
+        return consultaService.getConfirmacao(id_consulta);
     }
 
     @GetMapping("/atendimento")
-    public Object getConsultaDoPacienteParaAtendimento(@RequestParam(name = "nome", defaultValue = "") String nome,
-                                                       @RequestParam(name = "data") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate data) {
-        return consultaService.getConsultaDoPacienteParaAtendimento(nome, data);
+    public Object getConsultaDoPacienteParaAtendimento(@RequestParam(name = "id_consulta") Long id_consulta) {
+        return consultaService.getConsultaDoPacienteParaAtendimento(id_consulta);
+    }
+
+    @GetMapping("/iniciar")
+    public Object getIniciarConsulta(@RequestParam(name = "id_consulta") Long id_consulta) {
+        return consultaService.getIniciarConsulta(id_consulta);
     }
 
     @GetMapping("/paciente")
@@ -82,6 +85,29 @@ public class ConsultaController {
     public Object save(@Valid @RequestBody ConsultaRequestDTO consultaRequestDTO) {
         return consultaService.save(consultaRequestDTO);
     }
+
+    @PutMapping("/confirmacao")
+    public Object update1(@RequestParam(name = "id_consulta") Long id_consulta,
+                          @RequestParam Boolean confirmacao){
+
+        return consultaService.update1(id_consulta, confirmacao);
+    }
+
+    @PutMapping("/autorizacao")
+    public Object update2(@RequestParam(name = "id_consulta") Long id_consulta,
+                         @RequestParam Boolean autorizacao){
+
+        return consultaService.update2(id_consulta, autorizacao);
+    }
+
+    @PutMapping("/pagamento")
+    public Object update3(@RequestParam(name = "id_consulta") Long id_consulta,
+                         @RequestParam Boolean pagamento){
+
+        return consultaService.update3(id_consulta, pagamento);
+    }
+
+
 
     @PutMapping
     public Object update(@RequestParam(name = "id_consulta") Long id_consulta,

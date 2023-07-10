@@ -30,6 +30,12 @@ public class Consulta {
     @Column(nullable = false)
     private boolean retorno_consulta;
 
+    private Boolean confirmacao;
+
+    private Boolean autorizacao;
+
+    private Boolean pagamento;
+
     @ManyToOne
     @JoinColumn(name = "id_medico", referencedColumnName = "id_medico")
     Medico medico;
@@ -58,14 +64,41 @@ public class Consulta {
     public Consulta() {
     }
 
-    public Consulta(Long id, LocalDate data, LocalDateTime hora, boolean retorno_consulta, Medico medico, Funcionario funcionario, Paciente paciente) {
+    public Consulta(Long id, LocalDate data, LocalDateTime hora, boolean retorno_consulta, boolean confirmacao, boolean autorizacao, boolean pagamento, Medico medico, Funcionario funcionario, Paciente paciente) {
         this.id = id;
         this.data = data;
         this.hora = hora;
         this.retorno_consulta = retorno_consulta;
+        this.confirmacao = confirmacao;
+        this.autorizacao = autorizacao;
+        this.pagamento = pagamento;
         this.medico = medico;
         this.funcionario = funcionario;
         this.paciente = paciente;
+    }
+
+    public boolean isConfirmacao() {
+        return confirmacao;
+    }
+
+    public void setConfirmacao(boolean confirmacao) {
+        this.confirmacao = confirmacao;
+    }
+
+    public boolean isAutorizacao() {
+        return autorizacao;
+    }
+
+    public void setAutorizacao(boolean autorizacao) {
+        this.autorizacao = autorizacao;
+    }
+
+    public boolean isPagamento() {
+        return pagamento;
+    }
+
+    public void setPagamento(boolean pagamento) {
+        this.pagamento = pagamento;
     }
 
     public Long getId() {
