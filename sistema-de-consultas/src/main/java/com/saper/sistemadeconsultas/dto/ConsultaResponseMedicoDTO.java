@@ -11,11 +11,14 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class ConsultaResponseMedicoDTO {
+    public Long id_consulta;
     public LocalTime hora_consulta;
     public String data_consulta;
     public String nome_paciente;
 
     public ConsultaResponseMedicoDTO(Consulta consulta){
+        this.id_consulta = consulta.getId();
+
         Paciente paciente = consulta.getPaciente();
         if (paciente != null) {
             this.nome_paciente = consulta.getPaciente().getNome();

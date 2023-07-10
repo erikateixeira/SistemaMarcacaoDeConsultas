@@ -81,6 +81,21 @@ public class ConsultaController {
         return consultaService.getConsultasDoPaciente(nome);
     }
 
+    @GetMapping("/ligacao")
+    public Object getConfirmacaoBoolean(@RequestParam(name = "id_consulta") Long id_consulta) {
+        return consultaService.getConfirmacaoBoolean(id_consulta);
+    }
+
+    @GetMapping("/ps")
+    public Object getAutorizacaoBoolean(@RequestParam(name = "id_consulta") Long id_consulta) {
+        return consultaService.getAutorizacaoBoolean(id_consulta);
+    }
+
+    @GetMapping("/pag")
+    public Object getPagamentoBoolean(@RequestParam(name = "id_consulta") Long id_consulta) {
+        return consultaService.getPagamentoBoolean(id_consulta);
+    }
+
     @PostMapping
     public Object save(@Valid @RequestBody ConsultaRequestDTO consultaRequestDTO) {
         return consultaService.save(consultaRequestDTO);
@@ -88,21 +103,21 @@ public class ConsultaController {
 
     @PutMapping("/confirmacao")
     public Object update1(@RequestParam(name = "id_consulta") Long id_consulta,
-                          @RequestParam Boolean confirmacao){
+                          @RequestParam boolean confirmacao){
 
         return consultaService.update1(id_consulta, confirmacao);
     }
 
     @PutMapping("/autorizacao")
     public Object update2(@RequestParam(name = "id_consulta") Long id_consulta,
-                         @RequestParam Boolean autorizacao){
+                         @RequestParam boolean autorizacao){
 
         return consultaService.update2(id_consulta, autorizacao);
     }
 
     @PutMapping("/pagamento")
     public Object update3(@RequestParam(name = "id_consulta") Long id_consulta,
-                         @RequestParam Boolean pagamento){
+                         @RequestParam boolean pagamento){
 
         return consultaService.update3(id_consulta, pagamento);
     }

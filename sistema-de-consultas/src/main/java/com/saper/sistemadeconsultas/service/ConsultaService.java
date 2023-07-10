@@ -305,8 +305,38 @@ public class ConsultaService {
         return ResponseEntity.status(HttpStatus.CREATED).body(new ConsultaResponseDTO(consulta));
     }
 
+    public ResponseEntity<Object> getConfirmacaoBoolean(Long id_consulta) {
+        Optional<Consulta> consultaOptional = consultaRepository.findById(id_consulta);
+
+        if (consultaOptional.isEmpty()) {
+            throw new NoSuchElementException("Não existe consulta para o id" + id_consulta);
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(consultaOptional.get().isConfirmacao());
+        }
+    }
+
+    public ResponseEntity<Object> getAutorizacaoBoolean(Long id_consulta) {
+        Optional<Consulta> consultaOptional = consultaRepository.findById(id_consulta);
+
+        if (consultaOptional.isEmpty()) {
+            throw new NoSuchElementException("Não existe consulta para o id" + id_consulta);
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(consultaOptional.get().isAutorizacao());
+        }
+    }
+
+    public ResponseEntity<Object> getPagamentoBoolean(Long id_consulta) {
+        Optional<Consulta> consultaOptional = consultaRepository.findById(id_consulta);
+
+        if (consultaOptional.isEmpty()) {
+            throw new NoSuchElementException("Não existe consulta para o id" + id_consulta);
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(consultaOptional.get().isPagamento());
+        }
+    }
+
     @Transactional
-    public ResponseEntity<Boolean> update1(Long id_consulta, Boolean confirmacao){
+    public ResponseEntity<Object> update1(Long id_consulta, Boolean confirmacao){
         Consulta consulta = consultaRepository.findById(id_consulta).orElseThrow(()-> new NoSuchElementException("Consulta não encontrada."));
 
         consulta.setConfirmacao(confirmacao);
@@ -316,7 +346,7 @@ public class ConsultaService {
     }
 
     @Transactional
-    public ResponseEntity<Boolean> update2(Long id_consulta, Boolean autorizacao){
+    public ResponseEntity<Object> update2(Long id_consulta, Boolean autorizacao){
         Consulta consulta = consultaRepository.findById(id_consulta).orElseThrow(()-> new NoSuchElementException("Consulta não encontrada."));
 
         consulta.setAutorizacao(autorizacao);
@@ -326,7 +356,7 @@ public class ConsultaService {
     }
 
     @Transactional
-    public ResponseEntity<Boolean> update3(Long id_consulta, Boolean pagamento){
+    public ResponseEntity<Object> update3(Long id_consulta, Boolean pagamento){
         Consulta consulta = consultaRepository.findById(id_consulta).orElseThrow(()-> new NoSuchElementException("Consulta não encontrada."));
 
         consulta.setPagamento(pagamento);

@@ -9,6 +9,8 @@ import java.time.format.DateTimeFormatter;
 
 public class ConsultaResponseIniciarDTO {
 
+    public Long id_consulta;
+
     public String data_consulta;
     public LocalTime hora_consulta;
     public String nome_medico;
@@ -23,6 +25,8 @@ public class ConsultaResponseIniciarDTO {
     public String email;
 
     public ConsultaResponseIniciarDTO(Consulta consulta){
+
+        this.id_consulta = consulta.getId();
 
         LocalDate dataConsulta = consulta.getData();
         DateTimeFormatter formatoSaida = DateTimeFormatter.ofPattern("dd/MM/yyyy");

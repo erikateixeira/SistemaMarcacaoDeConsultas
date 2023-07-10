@@ -30,11 +30,11 @@ public class Consulta {
     @Column(nullable = false)
     private boolean retorno_consulta;
 
-    private Boolean confirmacao;
+    private boolean confirmacao;
 
-    private Boolean autorizacao;
+    private boolean autorizacao;
 
-    private Boolean pagamento;
+    private boolean pagamento;
 
     @ManyToOne
     @JoinColumn(name = "id_medico", referencedColumnName = "id_medico")
